@@ -1,0 +1,3038 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Sopha · Sua Implantação</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --cream: #fbfaf2;
+      --ink: #1a1a2e;
+      --plum: #252553;
+      --crimson: #c20047;
+      --crimson-soft: rgba(194, 0, 71, .10);
+      --gray: #8a8aa0;
+      --line: rgba(26, 26, 46, .12);
+      --green: #1f9d63;
+      --shadow: 0 12px 40px rgba(26, 26, 46, .10);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 24px
+    }
+
+    .screen {
+      display: none
+    }
+
+    .screen.active {
+      display: block;
+      animation: fade .4s ease
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .screen.active {
+        animation: none
+      }
+
+      * {
+        scroll-behavior: auto !important
+      }
+    }
+
+    /* login */
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--ink);padding:24px;position:relative;overflow:hidden}
+  .login-wrap::after{content:"";position:absolute;right:-140px;top:-100px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(194,0,71,.20),transparent 60%);pointer-events:none}
+  .login-card{position:relative;z-index:2;background:var(--cream);border-radius:20px;padding:40px 38px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .login-eyebrow{color:var(--crimson);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:12px;margin-bottom:10px}
+  .login-title{font-size:1.9rem;font-weight:800;letter-spacing:-.6px;margin-bottom:6px}
+  .login-sub{color:var(--gray);font-size:.95rem;margin-bottom:28px}
+  .login-field{margin-bottom:18px}
+  .login-field label{display:block;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--gray);margin-bottom:8px}
+  .login-field input{width:100%;padding:15px 16px;border-radius:12px;border:1.5px solid var(--line);background:#fff;font-size:16px;font-family:inherit;color:var(--ink);transition:border-color .2s}
+  .login-field input:focus{outline:none;border-color:var(--crimson)}
+  .login-erro{color:var(--crimson);font-size:.88rem;font-weight:600;margin-top:14px;min-height:20px;text-align:center}
+
+  /* hero */
+    .hero {
+      min-height: 100vh;
+      background: var(--ink);
+      color: var(--cream);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden
+    }
+
+    .hero .blob {
+      position: absolute;
+      right: -120px;
+      top: -80px;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(194, 0, 71, .22), transparent 60%);
+      pointer-events: none
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      padding: 60px 0
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 42px
+    }
+
+    .brand .mark{width:40px;height:40px;display:grid;place-items:center}
+    .brand .mark img,.who .mark img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;display:block}
+    .admin-top .mark{background:transparent!important;background-color:transparent!important}
+    .who .mark{width:38px;height:38px;border-radius:10px;overflow:hidden;display:grid;place-items:center;background:transparent}
+
+    .brand .name {
+      font-weight: 700;
+      letter-spacing: .5px;
+      font-size: 20px
+    }
+
+    .eyebrow {
+      color: var(--crimson);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 16px
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.03;
+      letter-spacing: -1.5px;
+      margin-bottom: 18px
+    }
+
+    .hero h1 em {
+      color: var(--crimson);
+      font-style: normal
+    }
+
+    .field input.travado,.field select.travado{opacity:.75;cursor:not-allowed;border-style:dashed}
+  .hero p{
+      font-size: 1.1rem;
+      color: rgba(251, 250, 242, .78);
+      max-width: 520px;
+      margin-bottom: 32px
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      max-width: 520px
+    }
+
+    .field {
+      margin-bottom: 18px
+    }
+
+    .field.full {
+      grid-column: 1/-1
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: rgba(251, 250, 242, .6);
+      margin-bottom: 9px
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 15px 16px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(251, 250, 242, .18);
+      background: rgba(251, 250, 242, .06);
+      color: var(--cream);
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color .2s, background .2s
+    }
+
+    .field input::placeholder {
+      color: rgba(251, 250, 242, .4)
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--crimson);
+      background: rgba(251, 250, 242, .10)
+    }
+
+    .field select option {
+      background: var(--ink);
+      color: var(--cream)
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      margin-top: 14px
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--crimson);
+      color: #fff;
+      padding: 15px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: .3px;
+      transition: transform .15s, box-shadow .15s, opacity .2s
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(194, 0, 71, .35)
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid rgba(194, 0, 71, .5);
+      outline-offset: 3px
+    }
+
+    .btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none
+    }
+
+    .link-quiet {
+      color: rgba(251, 250, 242, .6);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: underline;
+      background: none
+    }
+
+    .link-quiet:hover {
+      color: var(--cream)
+    }
+
+    /* questionnaire */
+    .q-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 60px 0
+    }
+
+    .q-card {
+      max-width: 640px;
+      margin: 0 auto;
+      width: 100%
+    }
+
+    .step-dots {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 36px;
+      flex-wrap: wrap
+    }
+
+    .step-dots span {
+      height: 5px;
+      flex: 1;
+      min-width: 14px;
+      border-radius: 3px;
+      background: var(--line)
+    }
+
+    .step-dots span.on {
+      background: var(--crimson)
+    }
+
+    .q-card h2 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -.8px;
+      margin-bottom: 10px
+    }
+
+    .q-card .sub {
+      color: var(--gray);
+      font-size: 1.02rem;
+      margin-bottom: 30px
+    }
+
+    .opts {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 34px
+    }
+
+    .opt {
+      text-align: left;
+      padding: 20px 24px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      transition: .18s;
+      display: flex;
+      align-items: center;
+      gap: 18px
+    }
+
+    .opt:hover {
+      border-color: var(--crimson);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow)
+    }
+
+    .opt:focus-visible {
+      outline: 3px solid rgba(194, 0, 71, .5);
+      outline-offset: 2px
+    }
+
+    .opt.sel {
+      border-color: var(--crimson);
+      background: var(--crimson-soft)
+    }
+
+    .opt .ic {
+      font-size: 24px;
+      flex-shrink: 0
+    }
+
+    .opt .t {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 2px
+    }
+
+    .opt .d {
+      font-size: .9rem;
+      color: var(--gray)
+    }
+
+    .opt.multi.sel::after {
+      content: "✓";
+      margin-left: auto;
+      color: var(--crimson);
+      font-weight: 800;
+      font-size: 20px
+    }
+
+    /* inputs abertos do quiz */
+    .q-input {
+      margin-bottom: 34px
+    }
+
+    .q-input select,
+    .q-input textarea,
+    .q-input input {
+      width: 100%;
+      padding: 16px 18px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 16px;
+      color: var(--ink);
+      transition: border-color .2s
+    }
+
+    .q-input textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.55
+    }
+
+    .q-input select:focus,
+    .q-input textarea:focus,
+    .q-input input:focus {
+      outline: none;
+      border-color: var(--crimson)
+    }
+
+    .q-optional {
+      font-size: .82rem;
+      color: var(--gray);
+      margin: -22px 0 30px
+    }
+
+    .q-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .q-nav .back {
+      color: var(--gray);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 4px
+    }
+
+    .q-nav .back:hover {
+      color: var(--crimson)
+    }
+
+    /* etapas + tarefas (pergunta 'stages') */
+    .stages {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 34px
+    }
+
+    .st-etapa {
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 20px;
+      background: #fff
+    }
+
+    .st-head {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--crimson);
+      margin-bottom: 14px
+    }
+
+    .st-tasks {
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .st-task {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: .95rem;
+      transition: .15s
+    }
+
+    .st-task:hover {
+      border-color: var(--crimson)
+    }
+
+    .st-task.on {
+      border-color: var(--crimson);
+      background: var(--crimson-soft)
+    }
+
+    .st-task input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--crimson);
+      flex-shrink: 0;
+      cursor: pointer
+    }
+
+    .st-custom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      background: var(--crimson-soft);
+      font-size: .9rem
+    }
+
+    .st-custom b {
+      color: var(--ink)
+    }
+
+    .st-del {
+      color: var(--crimson);
+      font-size: .78rem;
+      font-weight: 700;
+      text-decoration: underline
+    }
+
+    .st-add {
+      margin-top: 12px;
+      color: var(--crimson);
+      font-weight: 700;
+      font-size: .85rem
+    }
+
+    .st-form {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .st-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink)
+    }
+
+    .st-form input:focus {
+      outline: none;
+      border-color: var(--crimson)
+    }
+
+    .st-form .st-save {
+      align-self: flex-start
+    }
+
+    /* cronograma (timeline) */
+  .crono{position:relative;padding-left:8px;max-width:760px}
+  .cr-item{position:relative;padding:0 0 22px 62px}
+  .cr-item::before{content:"";position:absolute;left:23px;top:8px;bottom:-6px;width:3px;background:var(--line)}
+  .cr-item:last-child::before{display:none}
+  .cr-node{position:absolute;left:6px;top:0;width:38px;height:38px;border-radius:50%;background:#fff;border:3px solid var(--crimson);display:grid;place-items:center;font-weight:800;color:var(--crimson);font-size:15px;z-index:2}
+  .cr-item.marco .cr-node{background:var(--crimson);color:#fff;font-size:17px}
+  .cr-card{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:18px 22px;transition:.2s}
+  .cr-card:hover{box-shadow:var(--shadow)}
+  .cr-item.marco .cr-card{border-color:rgba(194,0,71,.35);background:linear-gradient(180deg,var(--crimson-soft),#fff)}
+  .cr-head{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .cr-fase{font-weight:800;font-size:1.1rem;letter-spacing:-.3px}
+  .cr-prazo{font-size:.8rem;font-weight:700;color:var(--crimson);background:var(--crimson-soft);padding:4px 12px;border-radius:20px;white-space:nowrap}
+  .cr-desc{color:var(--gray);font-size:.95rem}
+  .cr-sub{margin:12px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:9px}
+  .cr-sub li{font-size:.9rem;color:var(--ink);line-height:1.45}
+  .cr-sub li::marker{color:var(--crimson)}
+
+  /* cronograma compacto (faixa) */
+  .crono-strip{display:flex;align-items:stretch;gap:6px;overflow-x:auto;padding:4px 2px 14px;-webkit-overflow-scrolling:touch}
+  .cs-chip{flex:1;min-width:132px;display:flex;flex-direction:column;gap:7px;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:.18s;text-align:left}
+  .cs-chip:hover{border-color:var(--crimson)}
+  .cs-chip.on{border-color:var(--crimson);background:var(--crimson-soft);box-shadow:0 6px 20px rgba(194,0,71,.12)}
+  .cs-num{width:28px;height:28px;border-radius:50%;background:var(--crimson);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0}
+  .cs-fase{font-weight:800;font-size:.92rem;line-height:1.18;letter-spacing:-.2px}
+  .cs-prazo{font-size:.72rem;font-weight:700;color:var(--crimson)}
+  .cs-arrow{align-self:center;color:var(--line);font-size:22px;flex-shrink:0}
+  .crono-detail{margin-top:4px}
+  .cd-card{background:#fff;border:1.5px solid rgba(194,0,71,.25);border-radius:14px;padding:20px 22px;animation:fade .3s ease}
+  .cd-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+  .cd-fase{font-weight:800;font-size:1.15rem;letter-spacing:-.3px}
+  .cd-tag{font-size:.7rem;font-weight:700;color:var(--gray);background:var(--cream);border:1px solid var(--line);padding:3px 9px;border-radius:20px}
+  .cd-prazo{margin-left:auto;font-size:.78rem;font-weight:700;color:var(--crimson);background:var(--crimson-soft);padding:4px 12px;border-radius:20px;white-space:nowrap}
+  .cd-desc{color:var(--gray);font-size:.96rem;line-height:1.5}
+  .cd-sub{margin:12px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
+  .cd-sub li{font-size:.9rem;color:var(--ink);line-height:1.45}
+  .cd-sub li::marker{color:var(--crimson)}
+  @media(max-width:620px){.cs-arrow{display:none}.cs-chip{min-width:150px}}
+
+  /* boas-vindas (welcome2) */
+  .w2-hero{background:var(--ink);color:var(--cream);padding:70px 0 54px;position:relative;overflow:hidden}
+  .w2-hero::after{content:"";position:absolute;right:-100px;top:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(194,0,71,.22),transparent 60%);pointer-events:none}
+  .w2-hero .eyebrow{color:var(--crimson);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:13px;margin-bottom:14px}
+  .w2-hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1.2px;line-height:1.05;margin-bottom:16px}
+  .w2-hero h1 em{color:var(--crimson);font-style:normal}
+  .w2-hero p{color:rgba(251,250,242,.8);font-size:1.12rem;max-width:620px}
+  .w2-body{padding:50px 24px 70px}
+  .w2-sec{margin-bottom:52px}
+  .w2-sec .kicker{color:var(--crimson);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;font-size:12px;margin-bottom:8px}
+  .w2-sec h2{font-size:1.7rem;font-weight:800;letter-spacing:-.5px;margin-bottom:22px}
+  .w2-lead{color:var(--gray);margin:-12px 0 24px}
+  .w2-combos{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .w2-combo{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:20px 22px;transition:.2s}
+  .w2-combo:hover{border-color:var(--crimson);box-shadow:var(--shadow)}
+  .w2-combo-ic{width:34px;height:34px;border-radius:9px;background:var(--crimson);color:#fff;display:grid;place-items:center;font-weight:800;flex-shrink:0}
+  .w2-combo b{display:block;font-size:1.05rem;margin-bottom:4px}
+  .w2-combo span{font-size:.92rem;color:var(--gray);line-height:1.45}
+  .w2-cta{text-align:center;padding-top:8px}
+  .w2-cta .btn{font-size:17px;padding:17px 40px}
+  @media(max-width:620px){.w2-combos{grid-template-columns:1fr}}
+
+    /* dashboard */
+    .top {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 24px 0
+    }
+
+    .top-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap
+    }
+
+    .who {
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .who .mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--crimson);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #fff
+    }
+
+    .who .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--crimson), #e6356f);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #fff;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(194, 0, 71, .35)
+    }
+
+    .who .meta b {
+      display: block;
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -.3px
+    }
+
+    .who .meta span {
+      font-size: .82rem;
+      color: rgba(251, 250, 242, .72);
+      letter-spacing: .2px
+    }
+
+    .who .meta span b {
+      color: var(--cream);
+      font-weight: 700
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(251, 250, 242, .08);
+      padding: 5px;
+      border-radius: 12px
+    }
+
+    .tab {
+      padding: 10px 18px;
+      border-radius: 8px;
+      color: rgba(251, 250, 242, .7);
+      font-weight: 600;
+      font-size: 14px;
+      transition: .2s
+    }
+
+    .tab.on {
+      background: var(--crimson);
+      color: #fff
+    }
+
+    .tab:hover:not(.on) {
+      color: var(--cream)
+    }
+
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(251, 250, 242, .25);
+      color: var(--cream);
+      font-weight: 600;
+      font-size: 13.5px;
+      transition: .2s
+    }
+
+    .share-btn:hover {
+      border-color: var(--crimson);
+      background: rgba(194, 0, 71, .15)
+    }
+
+    .prog-bar-wrap {
+      background: #fff;
+      border-bottom: 1px solid var(--line)
+    }
+
+    .prog-bar-inner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 22px 0
+    }
+
+    .prog-meter {
+      flex: 1;
+      height: 10px;
+      border-radius: 6px;
+      background: var(--line);
+      overflow: hidden
+    }
+
+    .prog-meter i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, var(--crimson), #e6356f);
+      width: 0;
+      transition: width .5s ease;
+      border-radius: 6px
+    }
+
+    .prog-label {
+      font-weight: 800;
+      font-size: 1.1rem;
+      white-space: nowrap
+    }
+
+    .prog-label span {
+      color: var(--crimson)
+    }
+
+    section.view {
+      padding: 46px 0 80px
+    }
+
+    .view-head {
+      margin-bottom: 30px
+    }
+
+    .view-head .kicker {
+      color: var(--crimson);
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 8px
+    }
+
+    .view-head h3 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -.6px
+    }
+
+    .view-head p {
+      color: var(--gray);
+      margin-top: 6px;
+      max-width: 640px
+    }
+
+    /* stepper (mapa horizontal) */
+    .stepper {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 6px 2px 22px;
+      margin-bottom: 12px;
+      -webkit-overflow-scrolling: touch
+    }
+
+    .stp {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      min-width: 92px;
+      flex-shrink: 0;
+      padding-top: 4px;
+      opacity: .55;
+      transition: .2s
+    }
+
+    .stp:hover {
+      opacity: 1
+    }
+
+    .stp-dot {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2.5px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--gray);
+      transition: .2s
+    }
+
+    .stp-lbl {
+      font-size: .74rem;
+      font-weight: 700;
+      color: var(--ink);
+      text-align: center;
+      line-height: 1.25;
+      max-width: 100px
+    }
+
+    .stp.done {
+      opacity: 1
+    }
+
+    .stp.done .stp-dot {
+      background: var(--crimson);
+      border-color: var(--crimson);
+      color: #fff
+    }
+
+    .stp.atual {
+      opacity: 1
+    }
+
+    .stp.atual .stp-dot {
+      border-color: var(--crimson);
+      color: var(--crimson);
+      box-shadow: 0 0 0 4px var(--crimson-soft)
+    }
+    .stp.sel:not(.done) .stp-dot {
+      border-color: var(--crimson);
+      color: var(--crimson);
+      background: var(--crimson-soft)
+    }
+    .stp.sel .stp-dot {
+      box-shadow: 0 0 0 5px var(--crimson-soft);
+      transform: scale(1.08)
+    }
+    .stp.sel .stp-lbl {
+      color: var(--crimson)
+    }
+
+    .stp-line {
+      flex: 1;
+      min-width: 16px;
+      height: 2.5px;
+      background: var(--line);
+      margin-top: 24px;
+      border-radius: 2px
+    }
+
+    @media(max-width:620px) {
+      .stp-lbl {
+        display: none
+      }
+
+      .stp {
+        min-width: 52px
+      }
+    }
+
+    /* trail */
+    .m-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap
+    }
+
+    .m-now {
+      display: inline-block;
+      background: var(--crimson);
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px
+    }
+
+    .m-ok {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px
+    }
+
+    .m-count {
+      font-size: .74rem;
+      font-weight: 700;
+      color: var(--gray);
+      letter-spacing: .3px
+    }
+
+    .milestone.solo {
+      padding: 0
+    }
+
+    .milestone.solo::before {
+      display: none
+    }
+
+    .milestone.solo .m-card {
+      border-color: var(--crimson);
+      box-shadow: 0 8px 30px rgba(194, 0, 71, .10)
+    }
+
+    .milestone.solo.done .m-card {
+      border-color: rgba(31, 157, 99, .4);
+      box-shadow: 0 8px 30px rgba(31, 157, 99, .08)
+    }
+
+    .m-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line)
+    }
+
+    .m-nav-btn {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--crimson);
+      padding: 6px 2px;
+      text-align: left
+    }
+
+    .m-nav-btn:hover {
+      text-decoration: underline
+    }
+
+    .trail {
+      position: relative;
+      padding-left: 8px
+    }
+
+    .milestone {
+      position: relative;
+      padding: 0 0 26px 64px
+    }
+
+    .milestone::before {
+      content: "";
+      position: absolute;
+      left: 23px;
+      top: 6px;
+      bottom: -6px;
+      width: 3px;
+      background: var(--line)
+    }
+
+    .milestone:last-child::before {
+      display: none
+    }
+
+    .milestone.done::before {
+      background: var(--crimson)
+    }
+
+    .node {
+      position: absolute;
+      left: 6px;
+      top: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--gray);
+      font-size: 15px;
+      z-index: 2;
+      transition: .25s
+    }
+
+    .milestone.done .node {
+      background: var(--crimson);
+      border-color: var(--crimson);
+      color: #fff
+    }
+
+    .m-card {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      padding: 22px 24px;
+      transition: .2s
+    }
+
+    .m-card:hover {
+      box-shadow: var(--shadow)
+    }
+
+    .milestone.done .m-card {
+      border-color: rgba(194, 0, 71, .3)
+    }
+
+    .m-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px
+    }
+
+    .m-title {
+      font-weight: 800;
+      font-size: 1.18rem;
+      letter-spacing: -.3px
+    }
+
+    .m-desc {
+      color: var(--gray);
+      font-size: .96rem;
+      margin-top: 6px
+    }
+
+    .m-check {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1.5px solid var(--line);
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--gray);
+      transition: .2s
+    }
+
+    .m-check:hover {
+      border-color: var(--crimson);
+      color: var(--crimson)
+    }
+
+    .milestone.done .m-check {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff
+    }
+
+    .m-action {
+      margin-top: 18px;
+      background: var(--crimson-soft);
+      border: 1px solid rgba(194, 0, 71, .22);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap
+    }
+
+    .m-action .lbl {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ink);
+      flex: 1;
+      min-width: 200px
+    }
+
+    .m-action .lbl b {
+      color: var(--crimson);
+      font-weight: 800
+    }
+
+    .m-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--crimson);
+      color: #fff;
+      padding: 13px 22px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: .15s
+    }
+
+    .m-action-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(194, 0, 71, .3)
+    }
+
+    .m-hint {
+      flex-basis: 100%;
+      font-size: .76rem;
+      color: var(--gray);
+      margin-top: 2px
+    }
+
+    .m-extra {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--line);
+      display: none
+    }
+
+    .m-card.open .m-extra {
+      display: block
+    }
+
+    .m-todo {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 9px 0;
+      font-size: .95rem
+    }
+
+    .m-todo input {
+      width: 19px;
+      height: 19px;
+      accent-color: var(--crimson);
+      flex-shrink: 0;
+      cursor: pointer;
+      margin-top: 2px
+    }
+
+    .m-todo label {
+      cursor: pointer
+    }
+
+    .m-todo.checked label {
+      color: var(--gray);
+      text-decoration: line-through
+    }
+
+    .vid-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 14px
+    }
+
+    .vid-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 13px;
+      border-radius: 9px;
+      background: var(--crimson-soft);
+      color: var(--crimson);
+      font-weight: 600;
+      font-size: 13px;
+      transition: .15s
+    }
+
+    .vid-chip:hover {
+      background: var(--crimson);
+      color: #fff
+    }
+
+    .m-toggle {
+      margin-top: 14px;
+      color: var(--gray);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .2px
+    }
+
+    .m-toggle:hover {
+      color: var(--crimson)
+    }
+
+    .perso-item{background:#fff;border:1.5px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:.2s}
+  .perso-item:hover{border-color:var(--crimson)}
+  .perso-item.breve{opacity:.6}
+  .perso-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;background:none;cursor:pointer;font-family:inherit}
+  .perso-item.breve .perso-head{cursor:default}
+  .perso-nome{font-weight:800;font-size:1.08rem;color:var(--ink)}
+  .perso-tag{font-size:.7rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gray);background:var(--line);padding:4px 10px;border-radius:20px}
+  .perso-seta{color:var(--crimson);font-weight:800;transition:transform .2s}
+  .perso-item.open .perso-seta{transform:rotate(180deg)}
+  .perso-body{display:none;padding:0 22px 22px}
+  .perso-item.open .perso-body{display:block;animation:fade .25s ease}
+  .perso-oque{color:var(--gray);font-size:.96rem;margin-bottom:16px;line-height:1.5}
+  .perso-passos{margin-top:18px}
+  .perso-passos b{font-size:.82rem;text-transform:uppercase;letter-spacing:.4px;color:var(--crimson)}
+  .perso-passos ol{margin:10px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+  .perso-passos li{font-size:.92rem;color:var(--ink);line-height:1.45}
+  .perso-passos li::marker{color:var(--crimson);font-weight:800}
+  .perso-dica{margin-top:16px;background:var(--crimson-soft);border-radius:10px;padding:12px 16px;font-size:.9rem;color:var(--ink)}
+  /* learning */
+
+    /* learning */
+    .cat-head {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -.3px;
+      margin: 34px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .cat-head:first-of-type {
+      margin-top: 0
+    }
+
+    .cat-head::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line)
+    }
+
+    .vid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px
+    }
+
+    .vid-card {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: .2s
+    }
+
+    .vid-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow)
+    }
+
+    .vid-thumb {
+      aspect-ratio: 16/9;
+      background: var(--ink);
+      position: relative
+    }
+
+    .vid-thumb iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block
+    }
+    .vid-play {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      cursor: pointer;
+      background: var(--ink);
+      overflow: hidden;
+    }
+    .vid-play img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .25s, opacity .2s;
+      opacity: .92;
+    }
+    .vid-play:hover img {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+    .vid-play-ic {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--crimson);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      padding-left: 3px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .3);
+      transition: transform .2s;
+    }
+    .vid-play:hover .vid-play-ic {
+      transform: translate(-50%, -50%) scale(1.12);
+    }
+
+    .vid-thumb .placeholder {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: rgba(251, 250, 242, .5);
+      text-align: center;
+      padding: 20px;
+      font-size: 13px
+    }
+
+    .vid-body {
+      padding: 16px 18px
+    }
+
+    .vid-body .tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--crimson)
+    }
+
+    .vid-body h4 {
+      font-weight: 700;
+      font-size: 1.02rem;
+      margin: 6px 0 0
+    }
+
+    .pdf-card {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: inherit;
+      padding: 6px
+    }
+
+    .pdf-card .pdf-ic {
+      font-size: 38px;
+      padding: 18px 20px;
+      flex-shrink: 0
+    }
+
+    .pdf-card .pdf-desc {
+      font-size: .85rem;
+      color: var(--gray);
+      margin-top: 4px
+    }
+
+    .pdf-card:hover {
+      border-color: var(--crimson)
+    }
+
+    .done-banner {
+      background: linear-gradient(120deg, var(--plum), var(--ink));
+      color: var(--cream);
+      border-radius: var(--radius);
+      padding: 34px 36px;
+      margin-bottom: 30px;
+      display: none
+    }
+
+    .done-banner.show {
+      display: block;
+      animation: fade .4s ease
+    }
+
+    .done-banner h3 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px
+    }
+
+    .done-banner p {
+      color: rgba(251, 250, 242, .78)
+    }
+
+    footer {
+      padding: 30px 0;
+      text-align: center;
+      color: var(--gray);
+      font-size: 13px;
+      border-top: 1px solid var(--line)
+    }
+
+    .reset {
+      color: var(--gray);
+      text-decoration: underline;
+      font-size: 12px
+    }
+
+    .reset:hover {
+      color: var(--crimson)
+    }
+
+    /* modal */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 26, 46, .55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 20px
+    }
+
+    .modal-bg.show {
+      display: flex;
+      animation: fade .25s ease
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 18px;
+      max-width: 460px;
+      width: 100%;
+      padding: 30px 30px 26px;
+      box-shadow: var(--shadow)
+    }
+
+    .modal h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 8px
+    }
+
+    .modal p {
+      color: var(--gray);
+      font-size: .95rem;
+      margin-bottom: 18px
+    }
+
+    .modal textarea {
+      width: 100%;
+      height: 88px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 12px;
+      resize: none;
+      color: var(--ink)
+    }
+
+    .modal .m-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap
+    }
+
+    .btn.sm {
+      padding: 12px 18px;
+      font-size: 14px
+    }
+
+    .btn.ghost {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      color: var(--ink)
+    }
+
+    .btn.ghost:hover {
+      box-shadow: none;
+      background: var(--crimson-soft);
+      border-color: var(--crimson)
+    }
+
+    .btn.wa {
+      background: #25D366
+    }
+
+    .btn.wa:hover {
+      box-shadow: 0 10px 26px rgba(37, 211, 102, .35)
+    }
+
+    /* admin */
+    .admin-login {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink);
+      padding: 24px
+    }
+
+    .admin-login .box {
+      max-width: 380px;
+      width: 100%
+    }
+
+    .admin-top{background:var(--ink);color:var(--cream);padding:22px 0 24px}
+    .admin-top .top-inner{align-items:center}
+    .mark2{width:44px;height:44px;border-radius:12px;overflow:hidden;display:grid;place-items:center;background:transparent;flex-shrink:0}
+    .mark2 img{width:100%;height:100%;object-fit:contain;display:block}
+    .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:22px}
+    .kpi{background:rgba(251,250,242,.07);border:1px solid rgba(251,250,242,.12);border-radius:14px;padding:16px 18px}
+    .kpi .n{font-size:1.8rem;font-weight:800;letter-spacing:-.5px;line-height:1}
+    .kpi .l{font-size:.72rem;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:rgba(251,250,242,.6);margin-top:6px}
+    .kpi.destaque .n{color:#ff6b9d}
+    .admin-filtros{display:flex;gap:8px;margin-bottom:18px}
+    .af-btn{padding:9px 20px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:700;font-size:14px;color:var(--gray);transition:.15s}
+    .af-btn.on{background:var(--crimson);border-color:var(--crimson);color:#fff}
+    .af-btn:hover:not(.on){border-color:var(--crimson);color:var(--crimson)}
+    .store-card .sc-brand{font-size:.78rem;color:var(--gray);margin-top:2px}
+    .store-card .sc-etapas{font-size:.78rem;color:var(--gray);margin-top:10px}
+    @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:620px){.admin-top{padding-bottom:20px}}
+    .admin-top{
+      background: var(--plum);
+      color: var(--cream);
+      padding: 24px 0
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px
+    }
+
+    .store-card {
+      background: #fff;
+      border: 1.5px solid var(--line);
+      border-radius: 16px;
+      padding: 22px 24px;
+      transition: .2s
+    }
+
+    .store-card:hover {
+      box-shadow: var(--shadow)
+    }
+
+    .store-card .sc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px
+    }
+
+    .store-card h4 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -.3px
+    }
+
+    .store-card .sc-meta {
+      font-size: .85rem;
+      color: var(--gray);
+      margin-top: 3px
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 20px;
+      white-space: nowrap
+    }
+
+    .badge.impl {
+      background: var(--crimson-soft);
+      color: var(--crimson)
+    }
+
+    .badge.reimpl {
+      background: rgba(37, 55, 123, .12);
+      color: var(--plum)
+    }
+
+    .sc-pct {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 6px 0 14px
+    }
+
+    .sc-pct .num {
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--crimson)
+    }
+
+    .sc-meter {
+      flex: 1;
+      height: 8px;
+      border-radius: 5px;
+      background: var(--line);
+      overflow: hidden
+    }
+
+    .sc-meter i {
+      display: block;
+      height: 100%;
+      background: var(--crimson);
+      border-radius: 5px
+    }
+
+    .sc-marks {
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .sc-mark {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .86rem;
+      color: var(--gray)
+    }
+
+    .sc-mark .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 800;
+      flex-shrink: 0;
+      background: var(--line);
+      color: #fff
+    }
+
+    .sc-mark.ok .dot {
+      background: var(--green)
+    }
+
+    .sc-mark.ok {
+      color: var(--ink)
+    }
+
+    .sc-info {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line)
+    }
+
+    .sc-info .tit {
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--crimson);
+      margin-bottom: 8px
+    }
+
+    .sc-info .row {
+      display: flex;
+      gap: 8px;
+      font-size: .84rem;
+      margin-bottom: 5px
+    }
+
+    .sc-info .row b {
+      color: var(--ink);
+      min-width: 92px;
+      flex-shrink: 0;
+      font-weight: 700
+    }
+
+    .sc-info .row span {
+      color: var(--gray)
+    }
+
+    .sc-info .proc {
+      font-size: .82rem;
+      color: var(--gray);
+      margin-top: 8px;
+      background: var(--cream);
+      border-radius: 8px;
+      padding: 9px 11px
+    }
+
+    .sc-info .proc b {
+      display: block;
+      color: var(--ink);
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 3px
+    }
+
+    .sc-updated {
+      font-size: .78rem;
+      color: var(--gray);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line)
+    }
+
+    .admin-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray)
+    }
+
+    .sc-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+  .sc-foot .sc-updated{margin:0;padding:0;border:0}
+  .sc-del{font-size:.76rem;font-weight:700;color:var(--gray);border:1.5px solid var(--line);border-radius:8px;padding:6px 12px;transition:.15s}
+  .sc-del:hover{border-color:var(--crimson);color:var(--crimson)}
+  .store-card{cursor:pointer;text-align:left;width:100%;display:block;font-family:inherit}
+  .store-card:hover{border-color:var(--crimson)}
+  .sc-open{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:.8rem;font-weight:700;color:var(--crimson)}
+  .drawer-bg{position:fixed;inset:0;background:rgba(26,26,46,.6);display:none;z-index:60;overflow-y:auto}
+  .drawer-bg.show{display:block;animation:fade .2s ease}
+  .drawer{position:relative;margin:4vh auto;height:92vh;width:min(1000px,94vw);background:var(--cream);border-radius:20px;box-shadow:0 30px 80px rgba(26,26,46,.4);overflow-y:auto;padding:30px 36px 50px;animation:popIn .25s ease}
+  @keyframes popIn{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+  @keyframes slideIn{from{transform:translateX(30px);opacity:.6}to{transform:none;opacity:1}}
+  .drawer-x{position:absolute;top:18px;right:20px;font-size:18px;color:var(--gray);width:36px;height:36px;border-radius:9px}
+  .drawer-x:hover{background:var(--line);color:var(--ink)}
+  .dw-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin:6px 0 18px;padding-right:40px}
+  .dw-head h3{font-size:1.4rem;font-weight:800;letter-spacing:-.4px}
+  .dw-meta{font-size:.88rem;color:var(--gray);margin-top:3px}
+  .dw-pct{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .dw-pct .num{font-weight:800;font-size:1.6rem;color:var(--crimson)}
+  .dw-marks{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+  .dw-marks .sc-mark{background:#fff;border:1px solid var(--line);border-radius:20px;padding:5px 12px;font-size:.8rem;color:var(--gray)}
+  .dw-marks .sc-mark.ok{color:var(--ink)}
+  .dw-sec{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .dw-sec .tit{font-size:.72rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--crimson);margin-bottom:12px}
+  .dw-sec .row{display:flex;gap:10px;font-size:.9rem;margin-bottom:7px}
+  .dw-sec .row b{min-width:104px;flex-shrink:0;font-weight:700}
+  .dw-sec .row span{color:var(--gray)}
+  .proc-cols{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
+  .pc-col{flex:0 0 auto;min-width:158px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px}
+  .pc-et{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--crimson);margin-bottom:9px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .pc-task{font-size:.85rem;color:var(--ink);padding:7px 9px;line-height:1.35;background:#fff;border:1px solid var(--line);border-radius:7px;margin-bottom:6px}
+  .pc-task.nova{border-color:rgba(194,0,71,.35);background:var(--crimson-soft)}
+  .pc-motivo{display:block;font-size:.72rem;color:var(--gray);margin-top:3px;font-style:italic}
+  .pc-count{display:inline-block;background:var(--crimson);color:#fff;font-size:.65rem;font-weight:800;padding:1px 7px;border-radius:20px;margin-left:4px;vertical-align:middle}
+  .pc-col{min-width:190px}
+  .dw-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px}
+  .nova-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .nova-hint{font-size:.82rem;color:var(--gray)}
+  .nova-form{display:none;background:#fff;border:1.5px solid rgba(194,0,71,.3);border-radius:14px;padding:22px 24px;margin-bottom:22px}
+  .nova-form.show{display:block;animation:fade .25s ease}
+  .nf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+  .nf-field label{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gray);margin-bottom:6px}
+  .nf-field input,.nf-field select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:15px;color:var(--ink);background:#fff}
+  .nf-field input:focus,.nf-field select:focus{outline:none;border-color:var(--crimson)}
+  .nf-actions{display:flex;gap:10px}
+  .nf-msg{margin-top:12px;font-size:.88rem;font-weight:600;min-height:18px}
+  .nf-msg.ok{color:var(--green)}
+  .nf-msg.err{color:var(--crimson)}
+  @media(max-width:620px){.nf-grid{grid-template-columns:1fr}}
+  .import-bar {
+      background: #fff;
+      border: 1.5px dashed var(--line);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-bottom: 26px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .import-bar input {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 12px
+    }
+
+    @media(max-width:620px) {
+      .form-row {
+        grid-template-columns: 1fr
+      }
+
+      .top-inner {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .m-top {
+        flex-direction: column
+      }
+
+      .m-check {
+        align-self: flex-start
+      }
+
+      .m-action {
+        flex-direction: column;
+        align-items: stretch
+      }
+
+      .m-action-btn {
+        justify-content: center
+      }
+    }
+  </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SB_URL = 'https://zdsqbktldcwkvmeswixa.supabase.co';
+  const SB_KEY = 'sb_publishable_uSxL892iCkfIENYmaw6p4g_qhbyGQDL';
+  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+</script>
+</head>
+
+<body>
+
+  <!-- ============ LOGIN ============ -->
+<div class="screen active" id="screen-login">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="brand" style="margin-bottom:32px"><div class="mark"><img src="simbolo-sopha.png" alt="Sopha"></div><div class="name" style="color:var(--ink)">Sopha</div></div>
+      <div class="login-eyebrow">Acesso</div>
+      <h1 class="login-title">SEJA BEM-VINDO(A)</h1>
+      <p class="login-sub">Entre com o e-mail e a senha que você recebeu.</p>
+      <div class="login-field">
+        <label for="loginEmail">E-mail</label>
+        <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="username">
+      </div>
+      <div class="login-field">
+        <label for="loginPass">Senha</label>
+        <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn" id="loginBtn" style="width:100%;justify-content:center;margin-top:8px">Entrar →</button>
+      <p class="login-erro" id="loginErro"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ WELCOME ============ -->
+  <div class="screen" id="screen-welcome">
+    <div class="hero">
+      <div class="blob"></div>
+      <div class="wrap hero-inner">
+        <div class="brand">
+          <div class="mark"><img src="simbolo-sopha.png" alt="Sopha"></div>
+          <div class="name">Sopha</div>
+        </div>
+        <div class="eyebrow">Implantação</div>
+        <h1>Bora caminhar<br>para o <em>sucesso</em>.</h1>
+        <p>Esta é a trilha de implantação do Sopha na sua loja. Cada passo tem uma ação pra você fazer agora — no seu
+          ritmo, sem depender de ninguém.</p>
+        <div class="form-row">
+          <div class="field full">
+            <label for="lojaName">Nome da loja</label>
+            <input type="text" id="lojaName" placeholder="Ex: Móveis & Cia" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="pessoaName">Seu nome</label>
+            <input type="text" id="pessoaName" placeholder="Quem está acessando" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="funcaoSel">Sua função</label>
+            <select id="funcaoSel">
+            <option value="Dono(a)">Dono(a) da loja</option>
+            <option value="Influencer interno">Influencer interno</option>
+          </select>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn" id="startBtn" disabled>Começar a trilha →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ QUESTIONNAIRE ============ -->
+  <div class="screen" id="screen-quiz">
+    <div class="q-screen">
+      <div class="wrap">
+        <div class="q-card">
+          <div class="step-dots" id="dots"></div>
+          <div id="quizBody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ BOAS-VINDAS (cronograma + combinados) ============ -->
+<div class="screen" id="screen-welcome2">
+  <div class="w2-hero">
+    <div class="wrap">
+      <div class="eyebrow">Sejam bem-vindos</div>
+      <h1 id="w2Title">Bora caminhar para o <em>sucesso</em>!</h1>
+      <p id="w2Intro">Antes de começar, olha o caminho que vamos percorrer juntos. Se todos cumprirem os combinados, a implantação leva cerca de <b>2 semanas</b>.</p>
+    </div>
+  </div>
+  <div class="wrap w2-body">
+    <div class="w2-sec">
+      <div class="kicker">O processo</div>
+      <h2 id="w2CronoTitle">Nosso plano de implantação</h2>
+      <p class="w2-lead">Toque em cada etapa para ver os detalhes.</p>
+      <div class="crono-strip" id="cronoW2Strip"></div>
+      <div class="crono-detail" id="cronoW2Detail"></div>
+    </div>
+    <div class="w2-sec">
+      <div class="kicker">Combinados para o sucesso</div>
+      <h2>O que precisamos de você</h2>
+      <div class="w2-combos" id="combosW2"></div>
+    </div>
+    <div class="w2-cta">
+      <button class="btn" id="goTrail">Começar minha trilha →</button>
+    </div>
+  </div>
+</div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div class="screen" id="screen-dash">
+    <div class="top">
+      <div class="wrap top-inner">
+        <div class="who">
+          <div class="avatar" id="dashAvatar">L</div>
+          <div class="meta"><b id="dashLoja">Sua loja</b><span id="dashPessoa"></span></div>
+        </div>
+        <div class="top-right">
+          <button class="share-btn" id="shareBtn">📤 Enviar progresso ao consultor</button>
+          <div class="tabs">
+            <button class="tab on" data-tab="trail">Minha trilha</button>
+            <button class="tab" data-tab="learn">Aprender</button>
+        <button class="tab" data-tab="perso">Personalizar o Sopha</button>
+          </div>
+          <button class="share-btn" id="logoutBtn">↪ Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-bar-wrap">
+      <div class="wrap prog-bar-inner">
+        <div class="prog-label"><span id="progPct">0%</span> concluído</div>
+        <div class="prog-meter"><i id="progFill"></i></div>
+      </div>
+    </div>
+
+    <section class="view" id="view-trail">
+      <div class="wrap">
+        <div class="done-banner" id="doneBanner">
+          <h3>🎉 Trilha completa!</h3>
+          <p>Sua loja está implantada e rodando no padrão Sopha. Daqui pra frente o foco é disciplina diária — e seu
+            consultor acompanha pelo painel, entrando só quando precisar.</p>
+        </div>
+        <div class="view-head">
+          <div class="kicker" id="trailKicker">Sua jornada</div>
+          <h3 id="trailTitle">A trilha da implantação</h3>
+          <p id="trailIntro"></p>
+        </div>
+        <div class="stepper" id="stepper"></div>
+        <div class="trail" id="trail"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-perso" style="display:none">
+      <div class="wrap">
+        <div class="view-head">
+          <div class="kicker">Biblioteca de aprendizado</div>
+          <h3>Personalizar o Sopha</h3>
+          <p>Aprenda a configurar cada área do Sopha no seu ritmo — sem depender do consultor. Toque em cada item para ver o passo a passo.</p>
+        </div>
+        <div id="persoList"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-learn" style="display:none">
+      <div class="wrap">
+        <div class="view-head">
+          <div class="kicker">Central de aprendizado</div>
+          <h3>Vídeos e materiais do Sopha</h3>
+          <p>Biblioteca de consulta. Use quando bater uma dúvida — não precisa assistir tudo antes de começar.</p>
+        </div>
+        <div id="vidGrid"></div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap"></div>
+    </footer>
+  </div>
+
+  <!-- ============ ADMIN LOGIN ============ -->
+  <div class="screen" id="screen-admin-login">
+    <div class="admin-login">
+      <div class="box">
+        <div class="brand" style="margin-bottom:30px">
+          <div class="mark"><img src="simbolo-sopha.png" alt="Sopha"></div>
+          <div class="name" style="color:var(--cream)">sopha · consultor</div>
+        </div>
+        <div class="field full">
+          <label for="adminPass">Senha de acesso</label>
+          <input type="password" id="adminPass" placeholder="••••••••" autocomplete="off">
+        </div>
+        <div class="hero-actions">
+          <button class="btn" id="adminEnter">Entrar →</button>
+          <button class="link-quiet" id="adminBack">← Voltar</button>
+        </div>
+        <p id="adminErr" style="color:#ff8aa8;font-size:13px;margin-top:14px;display:none">Senha incorreta.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ADMIN DASHBOARD ============ -->
+  <div class="screen" id="screen-admin">
+    <div class="admin-top">
+      <div class="wrap top-inner">
+        <div class="who">
+          <div class="mark2"><img src="simbolo-sopha.png" alt="Sopha"></div>
+          <div class="meta"><b>Painel do consultor</b><span>Acompanhamento das lojas</span></div>
+        </div>
+        <button class="link-quiet" id="adminLogout">↪ Sair</button>
+      </div>
+      <div class="wrap"><div class="kpis" id="adminKpis"></div></div>
+    </div>
+    <section class="view">
+      <div class="wrap">
+        <div class="nova-bar">
+          <button class="btn sm" id="novaLojaBtn">➕ Cadastrar nova loja</button>
+          <span class="nova-hint">Crie o acesso no Supabase, depois cadastre aqui os dados da loja.</span>
+        </div>
+        <div class="nova-form" id="novaForm">
+          <div class="nf-grid">
+            <div class="nf-field"><label>E-mail de acesso da loja</label><input type="email" id="nfEmail" placeholder="loja@exemplo.com"></div>
+            <div class="nf-field"><label>Nome da loja</label><input type="text" id="nfLoja" placeholder="Ex: Móveis & Cia"></div>
+            <div class="nf-field"><label>Nome do responsável</label><input type="text" id="nfPessoa" placeholder="Ex: João Silva"></div>
+            <div class="nf-field"><label>Função</label>
+              <select id="nfFuncao">
+                <option value="Dono(a)">Dono(a) da loja</option>
+                <option value="Influencer interno">Influencer interno</option>
+              </select>
+            </div>
+          </div>
+          <div class="nf-actions">
+            <button class="btn sm" id="nfSalvar">Salvar loja</button>
+            <button class="btn sm ghost" id="nfCancelar">Cancelar</button>
+          </div>
+          <p class="nf-msg" id="nfMsg"></p>
+        </div>
+        <div class="import-bar">
+          <span style="font-weight:600;font-size:14px">Recebeu um código de uma loja?</span>
+          <input type="text" id="importCode" placeholder="Cole o código de progresso aqui">
+          <button class="btn sm" id="importBtn">Importar</button>
+        </div>
+        <div class="view-head">
+          <div class="kicker">Carteira de implantações</div>
+          <h3 id="adminCount">Lojas acompanhadas</h3>
+        </div>
+        <div class="admin-filtros">
+          <button class="af-btn on" data-filtro="ativas">Ativas</button>
+          <button class="af-btn" data-filtro="arquivadas">Arquivadas</button>
+        </div>
+        <input type="text" id="adminBusca" placeholder="🔎 Buscar por loja ou dono..." style="width:100%;max-width:420px;padding:12px 16px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:24px">
+        <div id="adminGrid"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ GAVETA (detalhe da loja) ============ -->
+  <div class="drawer-bg" id="drawerBg">
+    <div class="drawer"><button class="drawer-x" id="drawerX">✕</button><div id="drawerBody"></div></div>
+  </div>
+
+  <!-- ============ MODAL ============ -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" id="modalBox"></div>
+  </div>
+
+  <script>
+    /* =========================================================
+       ARMAZENAMENTO (localStorage com fallback em memória)
+       ========================================================= */
+    const _mem = {};
+    const store = {
+      get(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : (_mem[k] ?? null); } catch (e) { return _mem[k] ?? null; } },
+      set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { _mem[k] = v; } },
+      del(k) { try { localStorage.removeItem(k); } catch (e) { } delete _mem[k]; }
+    };
+    const IDX = 'sopha_index', CUR = 'sopha_current', PFX = 'sopha_store_';
+    const PASS_ADMIN = 'sopha2024';   // <<< senha do consultor (troque aqui)
+
+    /* =========================================================
+       CONTEÚDO — edite títulos, marcos, ações, links e vídeos aqui
+       ========================================================= */
+    const VIDEOS = [
+      { id: 'painel', cat: 'Visão Geral e Navegação', titulo: 'Painel de Controle', yt: 'HNa7pLPh-o8' },
+      { id: 'funil', cat: 'Visão Geral e Navegação', titulo: 'Funil de Vendas', yt: 'BBxDyl6cgWU' },
+      { id: 'proc-venda', cat: 'Visão Geral e Navegação', titulo: 'Visualizar o Processo de Venda', yt: 'zaFms4BX4Y8' },
+      { id: 'novo-cli', cat: 'Cadastro e Gestão de Clientes', titulo: 'Cadastrar Novo Cliente e Venda', yt: 'dC2cpeOhikg' },
+      { id: 'nova-venda', cat: 'Cadastro e Gestão de Clientes', titulo: 'Nova Venda p/ Cliente Existente', yt: 'akcGbvSWxOg' },
+      { id: 'alt-cli', cat: 'Cadastro e Gestão de Clientes', titulo: 'Alterar Dados do Cliente', yt: 'B1vMl5q_VHM' },
+      { id: 'lt-geral', cat: 'Linha do Tempo (Projetos)', titulo: 'Linha do Tempo – Visão Geral', yt: '2Trsu6gveC4' },
+      { id: 'lt-alt', cat: 'Linha do Tempo (Projetos)', titulo: 'Alterar ou Cancelar Linha do Tempo', yt: '3bxWW6JwTVc' },
+      { id: 'espec', cat: 'Linha do Tempo (Projetos)', titulo: 'Especificador no Projeto', yt: 'sBXJC-YOMGM' },
+      { id: 'pre-venda', cat: 'Etapas do Processo de Venda', titulo: 'Pré-venda para Venda', yt: 'HHjlXvkJ2T0' },
+      { id: 'venda-med', cat: 'Etapas do Processo de Venda', titulo: 'Venda para Medição', yt: 'Cl6ea1k5s8o' },
+      { id: 'agendar', cat: 'Etapas do Processo de Venda', titulo: 'Agendar Apresentação', yt: 'fIeBO6ANzt4' },
+      { id: 'assinatura', cat: 'Contratos, Documentos e Arquivos', titulo: 'Realizar Assinatura do Contrato', yt: '1ocjz9qs0FY' },
+      { id: 'anexar', cat: 'Contratos, Documentos e Arquivos', titulo: 'Anexar Arquivos', yt: 'hU3HPWHPgdg' },
+      { id: 'direct', cat: 'Comunicação', titulo: 'Direct e Mensagens Prontas', yt: '6KuFE2Z2BLk' },
+      { id: 'checklist', cat: 'Checklists e Organização', titulo: 'Criar Checklist de Venda', yt: 'lI0vd3qbRBA' },
+      { id: 'cli-sopha', cat: 'Experiência do Cliente', titulo: 'Como Utilizar o Cliente.Sopha', yt: 'Ge_jRMuFiDw' },
+    ];
+    const CATS = ['Visão Geral e Navegação', 'Cadastro e Gestão de Clientes', 'Linha do Tempo (Projetos)', 'Etapas do Processo de Venda', 'Contratos, Documentos e Arquivos', 'Comunicação', 'Checklists e Organização', 'Experiência do Cliente'];
+
+    const PDFS = [
+      { titulo: 'Setup Inicial — Cadastro de Equipe', desc: 'Passo a passo para cadastrar cada pessoa da loja.', url: 'Setup-Inicial.pdf' },
+      { titulo: 'Cadastro de Cliente', desc: 'Como cadastrar clientes e vendas no Sopha.', url: 'Cadastro-Cliente.pdf' },
+    ];
+
+    const TRILHA_IMPLANTACAO = {
+      kicker: 'Sua jornada · Implantação',
+      titulo: 'A trilha da implantação',
+      intro: 'Você já fez o kickoff com seu consultor. Agora é mão na massa: cada passo tem uma ação pra fazer agora, direto no Sopha. Precisou de ajuda? O vídeo do passo está ali, recolhido.',
+      marcos: [
+        {
+          id: 'equipe', icon: '👥', titulo: 'Cadastrar a equipe', desc: 'Crie o acesso de cada pessoa da loja no Sopha.',
+          acao: 'Cadastre a primeira pessoa da equipe.',
+          botao: { label: 'Abrir Funcionários no Sopha', url: 'https://www.lojista.sopha.com.br/funcionarios' },
+          todos: [
+            'Acessar lojista.sopha.com.br com o e-mail e senha do gestor de projetos',
+            'Menu → Gerencial → Funcionários → Cadastrar Novo Funcionário',
+            'Dados de Acesso: preencher os obrigatórios (dica: senha = 6 primeiros dígitos do CPF)',
+            'Dados Profissionais: definir loja(s), cargo e perfil (permissões)',
+            'Salvar — cada pessoa recebe um e-mail de confirmação'
+          ], videos: [], docs: [{ titulo: 'Tutorial em PDF — Setup Inicial', url: 'Setup-Inicial.pdf' }]
+        },
+        {
+          id: 'clientes', icon: '📇', titulo: 'Cadastrar os clientes', desc: 'Traga sua carteira para dentro do Sopha.',
+          acao: 'Cadastre seu primeiro cliente e a venda dele.',
+          botao: { label: 'Abrir Clientes no Sopha', url: 'https://www.lojista.sopha.com.br/clientes' },
+          todos: ['Cadastrar o primeiro cliente e a venda', 'Lançar nova venda para cliente já existente', 'Conferir e ajustar dados de contato'],
+          videos: ['novo-cli', 'nova-venda', 'alt-cli'], docs: [{ titulo: 'Tutorial em PDF — Cadastro de Cliente', url: 'Cadastro-Cliente.pdf' }]
+        },
+        {
+          id: 'organizar', icon: '🧭', titulo: 'Entender o processo', desc: 'Conheça o painel e o funil para enxergar a operação inteira.',
+          acao: 'Abra o Painel de Controle e veja sua operação hoje.',
+          botao: { label: 'Abrir Painel de Controle', url: 'https://www.lojista.sopha.com.br/v3/painel-novo/' },
+          todos: ['Conhecer o Painel de Controle', 'Entender o Funil de Vendas', 'Visualizar o processo de venda de ponta a ponta'],
+          videos: ['painel', 'funil', 'proc-venda'], docs: []
+        },
+        {
+          id: 'movimentar', icon: '⚡', titulo: 'Primeira movimentação', desc: 'Regra de Ouro: todo cliente com uma próxima ação — prazo e responsável definidos.',
+          acao: 'Abra um cliente e crie a 1ª tarefa (com prazo e responsável).',
+          botao: { label: 'Abrir Clientes no Sopha', url: 'https://www.lojista.sopha.com.br/clientes' },
+          todos: ['Abrir a Linha do Tempo de um cliente', 'Criar a 1ª tarefa com prazo e responsável', 'Usar Direct e Checklist para não esquecer ninguém'],
+          videos: ['lt-geral', 'direct', 'checklist'], docs: []
+        },
+        {
+          id: 'lancar', icon: '🚀', titulo: 'Lançar com o time', desc: 'Reúna a equipe e treine cada departamento nas etapas do processo.',
+          acao: 'Mova um cliente de etapa no funil, com o time junto.',
+          botao: { label: 'Abrir Funil de Vendas', url: 'https://www.lojista.sopha.com.br/v3/funil-vendas' },
+          todos: ['Reunião de lançamento com todos', 'Treinar as mudanças de etapa (pré-venda → venda → medição)', 'Agendar apresentações pelo sistema'],
+          videos: ['pre-venda', 'venda-med', 'agendar'], docs: []
+        },
+        {
+          id: 'disciplina', icon: '🔥', titulo: 'Criar o hábito', desc: 'Entrar no Sopha todo dia — e dominar os recursos avançados.',
+          acao: 'Entre pela Minha Semana e acompanhe suas tarefas do dia.',
+          botao: { label: 'Abrir Minha Semana', url: 'https://www.lojista.sopha.com.br/minha-semana' },
+          todos: ['Assinar contrato e anexar arquivos no sistema', 'Mostrar o Cliente.Sopha para um cliente', 'Usar 3 dias seguidos, com o líder revisando os dados'],
+          videos: ['assinatura', 'anexar', 'cli-sopha'], docs: []
+        },
+      ]
+    };
+
+    const TRILHA_REIMPLANTACAO = {
+      kicker: 'Sua jornada · Retomada',
+      titulo: 'A trilha da retomada',
+      intro: 'Sua loja já conhece o Sopha — vamos retomar o controle. Cada passo tem uma ação direta pra fazer agora. O vídeo fica como apoio, só se precisar.',
+      marcos: [
+        {
+          id: 'diag', icon: '🔍', titulo: 'Diagnóstico: o que parou?', desc: 'Entenda onde a rotina escapou antes de recomeçar.',
+          acao: 'Abra o Painel e veja o estado real da operação hoje.',
+          botao: { label: 'Abrir Painel de Controle', url: 'https://www.lojista.sopha.com.br/v3/painel-novo/' },
+          todos: ['Clientes sem tarefa se acumularam', 'A equipe parou de entrar todo dia', 'A carteira ficou desatualizada'],
+          videos: ['painel'], docs: []
+        },
+        {
+          id: 'limpar', icon: '🧹', titulo: 'Reorganizar a operação', desc: 'Reveja o funil e atualize a base.',
+          acao: 'Abra o Funil e revise onde está cada cliente.',
+          botao: { label: 'Abrir Funil de Vendas', url: 'https://www.lojista.sopha.com.br/v3/funil-vendas' },
+          todos: ['Revisar o Funil de Vendas', 'Conferir o Painel de Controle', 'Atualizar/remover clientes inativos'],
+          videos: ['funil', 'painel', 'alt-cli'], docs: []
+        },
+        {
+          id: 'regra', icon: '⚡', titulo: 'Retomar a Regra de Ouro', desc: 'Nenhum cliente sem próxima ação. Esse é o coração da retomada.',
+          acao: 'Abra os clientes ativos e crie uma tarefa para cada um.',
+          botao: { label: 'Abrir Clientes no Sopha', url: 'https://www.lojista.sopha.com.br/clientes' },
+          todos: ['Abrir a Linha do Tempo dos clientes ativos', 'Criar tarefa para cada um, com prazo e responsável', 'Zerar os clientes esquecidos'],
+          videos: ['lt-geral', 'checklist'], docs: []
+        },
+        {
+          id: 'time', icon: '🤝', titulo: 'Reengajar o time', desc: 'Trazer a equipe de volta ao hábito, com reforço rápido.',
+          acao: 'Mostre a Minha Semana pro time e recombine o uso diário.',
+          botao: { label: 'Abrir Minha Semana', url: 'https://www.lojista.sopha.com.br/minha-semana' },
+          todos: ['Reunião curta de retomada', 'Reforçar Direct e processo de venda', 'Recombinar o uso diário'],
+          videos: ['direct', 'proc-venda'], docs: []
+        },
+        {
+          id: 'ritmo', icon: '🔥', titulo: 'Voltar ao ritmo', desc: 'Reconstruir a disciplina diária até virar hábito de novo.',
+          acao: 'Entre todo dia pela Agenda de Hoje.',
+          botao: { label: 'Abrir Agenda de Hoje', url: 'https://www.lojista.sopha.com.br/agenda-de-hoje' },
+          todos: ['Usar 3 dias seguidos', 'Líder cobrando pelos dados', 'Manter todos os clientes com tarefa'],
+          videos: ['cli-sopha'], docs: []
+        },
+      ]
+    };
+
+    /* =========================================================
+       QUESTIONÁRIO — 10 perguntas (roteia + coleta info p/ o consultor)
+       Tipos: 'single' (cartão), 'multi' (vários cartões),
+              'select' (lista suspensa), 'text', 'textarea'.
+       Use optional:true para permitir avançar sem responder.
+       ========================================================= */
+    const ETAPAS_TAREFAS = [
+      { etapa: 'Pré-Venda', tarefas: ['Qualificação', 'Desenvolvimento do Projeto inicial', 'Apresentação do Projeto'] },
+      { etapa: 'Venda', tarefas: ['Negociação', 'Previsão de Assinatura do Contrato'] },
+      { etapa: 'Medição', tarefas: ['Medição Imediata', 'Medição Futura'] },
+      { etapa: 'Executivo', tarefas: ['Desenvolvimento do Projeto Executivo', 'Previsão de Aprovação do Executivo'] },
+      { etapa: 'Fabricação', tarefas: ['Implantação de Pedido na Fábrica', 'Em Fabricação', 'DLE - Data Limite de Entrega'] },
+      { etapa: 'Entrega', tarefas: ['Previsão de Entrega Realizada', 'Conferência da entrega'] },
+      { etapa: 'Montagem', tarefas: ['Preisão de Término da Montagem', 'Pendências de Montagem'] },
+      { etapa: 'Pós-Montagem', tarefas: ['Previsão de Finalização', 'Vistoria Final'] },
+      { etapa: 'Assistência Técnica', tarefas: ['Previsão de Finalização da Assistência Técnica'] },
+    ];
+    const QUIZ = [
+      {
+        key: 'modo', type: 'single', titulo: 'Como começamos?', sub: 'Isso define a trilha certa para a sua loja.',
+        opcoes: [
+          { val: 'implantacao', ic: '🚀', t: 'É a primeira vez', d: 'A loja está implantando o Sopha do zero.' },
+          { val: 'reimplantacao', ic: '🔄', t: 'Estamos retomando', d: 'A loja já usou o Sopha e vai recomeçar.' },
+        ]
+      },
+      {
+        key: 'porte', type: 'single', titulo: 'Qual o tamanho da equipe?', sub: 'Para calibrar o ritmo dos próximos passos.',
+        opcoes: [
+          { val: 'p', ic: '🏠', t: 'Até 5 pessoas', d: 'Operação enxuta.' },
+          { val: 'm', ic: '🏢', t: '6 a 15 pessoas', d: 'Loja em crescimento.' },
+          { val: 'g', ic: '🏬', t: 'Mais de 15', d: 'Operação com vários times.' },
+        ]
+      },
+      {
+        key: 'deps', type: 'multi', customKey: 'deps_outros', customTrigger: 'outros', customPlaceholder: 'Escreva a(s) outra(s) área(s)', titulo: 'Quais áreas vão usar o Sopha?', sub: 'Pode marcar mais de uma. Toque para selecionar.',
+        opcoes: [
+          { val: 'vendas', ic: '🤝', t: 'Vendas', d: '' },
+          { val: 'entrega', ic: '🚚', t: 'Entrega / Logística', d: '' },
+          { val: 'pos', ic: '💬', t: 'Pós-venda / Atendimento', d: '' },
+          { val: 'gestao', ic: '📊', t: 'Gestão / Direção', d: '' },
+          { val: 'outros', ic: '➕', t: 'Outros', d: '' },
+        ]
+      },
+      {
+        key: 'marca', type: 'select', customKey: 'marca_outra', customTrigger: 'Outra marca', customPlaceholder: 'Escreva o nome da marca / fábrica', titulo: 'Qual marca ou fábrica a loja representa?', sub: 'Escolha "Fábrica Própria" se produz, ou "Outra marca" para escrever o nome.',
+        opcoes: [
+          { val: 'Todeschini', t: 'Todeschini' }, { val: 'Dell Anno', t: 'Dell Anno' }, { val: 'Italínea', t: 'Italínea' },
+          { val: 'Criare', t: 'Criare' }, { val: 'Florense', t: 'Florense' }, { val: 'Ornare', t: 'Ornare' },
+          { val: 'Bontempo', t: 'Bontempo' }, { val: 'SCA', t: 'SCA' }, { val: 'Favorita', t: 'Favorita' },
+          { val: 'New', t: 'New' }, { val: 'Simonetto', t: 'Simonetto' }, { val: 'Finger', t: 'Finger' },
+          { val: 'Celmar', t: 'Celmar' }, { val: 'Predilecta', t: 'Predilecta' }, { val: 'Kitchens', t: 'Kitchens' },
+          { val: 'Evviva Bertolini', t: 'Evviva Bertolini' }, { val: 'Sierra', t: 'Sierra' },
+          { val: 'Líder Interiores', t: 'Líder Interiores' }, { val: 'Bartira', t: 'Bartira' },
+          { val: 'Delare', t: 'Delare' }, { val: 'Espaço Design', t: 'Espaço Design' }, { val: 'BK Ciandre', t: 'BK Ciandre' },
+          { val: 'Nicioli', t: 'Nicioli' }, { val: 'Fábrica Própria (Marcenaria)', t: 'Fábrica Própria (Marcenaria)' },
+          { val: 'Outra marca', t: 'Outra marca' },
+        ]
+      },
+      {
+        key: 'unidades', type: 'single', titulo: 'Quantas unidades/lojas a empresa tem?', sub: 'Para o consultor configurar as lojas no sistema.',
+        opcoes: [
+          { val: '1', ic: '📍', t: '1 loja', d: '' },
+          { val: '2-3', ic: '📍', t: '2 a 3 lojas', d: '' },
+          { val: '4+', ic: '📍', t: '4 ou mais', d: '' },
+        ]
+      },
+      { key: 'processo', type: 'stages', titulo: 'Monte o processo da sua loja', sub: 'Cada etapa já vem com tarefas comuns do Sopha. Marque as que a sua loja possa usar — e adicione novas se precisar. 🚨 Limite de 3 tarefas no maximo por Etapa.' },
+      {
+        key: 'cargos', type: 'multi', titulo: 'Quais cargos existem na equipe hoje?', sub: 'Ajuda o consultor a montar os cargos, perfis e permissões.',
+        opcoes: [
+          { val: 'vendedor', ic: '🧑‍💼', t: 'Vendedor(a)', d: '' },
+          { val: 'projetista', ic: '🎨', t: 'Projetista', d: '' },
+          { val: 'medidor', ic: '📐', t: 'Medidor(a)', d: '' },
+          { val: 'montador', ic: '🔧', t: 'Montador(a)', d: '' },
+          { val: 'gerente', ic: '📊', t: 'Gerente', d: '' },
+          { val: 'financeiro', ic: '💰', t: 'Financeiro', d: '' },
+          { val: 'posvenda', ic: '💬', t: 'Pós-venda / Atendimento', d: '' },
+          { val: 'diretor', ic: '👑', t: 'Diretor(a) / Dono(a)', d: '' },
+        ]
+      },
+      {
+        key: 'ferramenta', type: 'multi', optional: true, customKey: 'ferramenta_outro', customTrigger: 'outro', customPlaceholder: 'Qual outro sistema?', titulo: 'Usam algum sistema hoje pra gerir isso?', sub: 'Pode marcar mais de um. (opcional)',
+        opcoes: [
+          { val: 'planilha', ic: '📊', t: 'Planilha', d: '' },
+          { val: 'trello', ic: '📋', t: 'Trello', d: '' },
+          { val: 'whatsapp', ic: '💬', t: 'WhatsApp', d: '' },
+          { val: 'focco', ic: '🏭', t: 'Focco Lojas', d: '' },
+          { val: 'efinance', ic: '💰', t: 'eFinance', d: '' },
+          { val: 'bling', ic: '📦', t: 'Bling', d: '' },
+          { val: 'nenhum', ic: '🚫', t: 'Nenhum / no papel', d: '' },
+          { val: 'outro', ic: '➕', t: 'Outro', d: '' },
+        ]
+      },
+      {
+        key: 'obs', type: 'textarea', optional: true, titulo: 'Algo mais que o consultor precisa saber?', sub: 'Alguma particularidade da loja, um combinado, uma expectativa. (opcional)',
+        placeholder: 'Escreva aqui qualquer observação que ajude na configuração...'
+      },
+    ];
+
+    /* =========================================================
+       REGISTROS DE LOJA
+       ========================================================= */
+    function normalize(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'loja'; }
+    function getIndex() { return store.get(IDX) || []; }
+    function putStore(rec) { rec.updated = Date.now(); store.set(PFX + rec.slug, rec); const i = getIndex(); if (!i.includes(rec.slug)) { i.push(rec.slug); store.set(IDX, i); } }
+    function getStore(slug) { return store.get(PFX + slug); }
+    function delStore(slug) { store.del(PFX + slug); store.set(IDX, getIndex().filter(s => s !== slug)); }
+    function newRecord() { return { slug: '', loja: '', pessoa: '', funcao: 'Dono(a)', answers: {}, progress: {}, qIndex: 0, step: 'welcome', updated: Date.now() }; }
+
+    let state = newRecord();
+    let focoMarco = null; // qual marco está aberto na trilha
+
+    function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById('screen-' + id).classList.add('active'); window.scrollTo(0, 0); }
+    function save() { putStore(state); store.set(CUR, state.slug); cloudSave(state); }
+    async function cloudSave(rec) {
+      try {
+        const { data: u } = await sb.auth.getUser();
+        if (!u || !u.user) { console.warn('sem usuário logado, não salva na nuvem'); return; }
+        await sb.from('lojas').upsert({ slug: rec.slug, data: rec, updated: new Date().toISOString(), user_id: u.user.id });
+      } catch (e) { console.warn('cloudSave falhou (segue com localStorage):', e); }
+    }
+    function trailFor(modo) { return modo === 'reimplantacao' ? TRILHA_REIMPLANTACAO : TRILHA_IMPLANTACAO; }
+    function pctFor(rec) { const T = trailFor(rec.answers && rec.answers.modo); const done = T.marcos.filter(m => rec.progress['m_' + m.id]).length; return Math.round(done / T.marcos.length * 100); }
+    function optLabel(qkey, val) { const q = QUIZ.find(x => x.key === qkey); if (!q || !q.opcoes) return val; const o = q.opcoes.find(x => x.val === val); return o ? o.t : val; }
+
+    /* ---------- WELCOME ---------- */
+    const lojaInput = document.getElementById('lojaName');
+    const pessoaInput = document.getElementById('pessoaName');
+    const funcaoSel = document.getElementById('funcaoSel');
+    const startBtn = document.getElementById('startBtn');
+    function checkStart() { startBtn.disabled = !(lojaInput.value.trim() && pessoaInput.value.trim()); }
+    lojaInput.addEventListener('input', checkStart);
+    pessoaInput.addEventListener('input', checkStart);
+    pessoaInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !startBtn.disabled) startBtn.click(); });
+    startBtn.addEventListener('click', () => {
+      const slug = normalize(lojaInput.value);
+      const existing = getStore(slug);
+      if (existing) {
+        state = existing; state.pessoa = pessoaInput.value.trim(); state.funcao = funcaoSel.value;
+        save();
+        if (state.answers && state.answers.modo) { renderDash(); show('dash'); }
+        else { state.qIndex = 0; renderQuiz(); show('quiz'); }
+      } else {
+        state = newRecord();
+        state.loja = lojaInput.value.trim(); state.pessoa = pessoaInput.value.trim();
+        state.funcao = funcaoSel.value; state.slug = slug; state.step = 'quiz';
+        save(); renderQuiz(); show('quiz');
+      }
+    });
+
+    /* ---------- QUIZ ---------- */
+    function renderDots() { document.getElementById('dots').innerHTML = QUIZ.map((_, i) => `<span class="${i <= state.qIndex ? 'on' : ''}"></span>`).join(''); }
+    function canAdvance() {
+      const q = QUIZ[state.qIndex]; const a = state.answers[q.key];
+      if (q.optional) return true;
+      if (q.type === 'multi') return Array.isArray(a) && a.length > 0;
+      if (q.type === 'stages') {
+        const proc = state.answers.processo || {};
+        return ETAPAS_TAREFAS.every(et => {
+          const d = proc[et.etapa] || { sel: {}, custom: [] };
+          const temSel = d.sel && Object.keys(d.sel).some(k => d.sel[k]);
+          const temCustom = Array.isArray(d.custom) && d.custom.length > 0;
+          return temSel || temCustom;
+        });
+      }
+      if (q.type === 'text' || q.type === 'textarea') return true;
+      if (q.type === 'select') { if (q.customKey && a === q.customTrigger) return !!(state.answers[q.customKey] && state.answers[q.customKey].trim()); return !!a; }
+      return !!a; // single
+    }
+    function updateNextBtn() { const b = document.getElementById('qNext'); if (b) b.disabled = !canAdvance(); }
+    function stagesHtml() {
+      const data = state.answers.processo || {};
+      return '<div class="stages">' + ETAPAS_TAREFAS.map((et, ei) => {
+        const d = data[et.etapa] || { sel: {}, custom: [] };
+        const tasks = et.tarefas.map(t => {
+          const on = !!(d.sel && d.sel[t]);
+          return `<label class="st-task ${on ? 'on' : ''}"><input type="checkbox" data-etapa="${ei}" data-task="${t.replace(/"/g, '&quot;')}" ${on ? 'checked' : ''}><span>${t}</span></label>`;
+        }).join('');
+        const customs = (d.custom || []).map((c, ci) => `<div class="st-custom"><span>➕ <b>${esc(c.titulo)}</b>${c.motivo ? ' — ' + esc(c.motivo) : ''}</span><button type="button" class="st-del" data-etapa="${ei}" data-ci="${ci}">remover</button></div>`).join('');
+        return `<div class="st-etapa"><div class="st-head">${et.etapa}</div><div class="st-tasks">${tasks}</div>${customs}
+      <button type="button" class="st-add" data-etapa="${ei}">＋ Adicionar tarefa</button>
+      <div class="st-form" id="stform-${ei}" style="display:none">
+        <input type="text" class="st-titulo" placeholder="Título da nova tarefa" data-etapa="${ei}">
+        <input type="text" class="st-motivo" placeholder="Por que incluir? (opcional)" data-etapa="${ei}">
+        <button type="button" class="btn sm st-save" data-etapa="${ei}">Salvar</button>
+      </div></div>`;
+      }).join('') + '</div>';
+    }
+    function ensureProcesso(ei) {
+      if (!state.answers.processo) state.answers.processo = {};
+      const et = ETAPAS_TAREFAS[ei].etapa;
+      if (!state.answers.processo[et]) state.answers.processo[et] = { sel: {}, custom: [] };
+      return state.answers.processo[et];
+    }
+    function bindStages() {
+      document.querySelectorAll('#quizBody .st-task input').forEach(cb => cb.addEventListener('change', () => {
+        const d = ensureProcesso(+cb.dataset.etapa); d.sel[cb.dataset.task] = cb.checked;
+        cb.closest('.st-task').classList.toggle('on', cb.checked); save(); updateNextBtn();
+        const av = document.getElementById('stagesAviso'); if (av) av.textContent = canAdvance() ? '' : '⚠️ Marque ou crie pelo menos uma tarefa em cada etapa para continuar.';
+      }));
+      document.querySelectorAll('#quizBody .st-add').forEach(b => b.addEventListener('click', () => {
+        const f = document.getElementById('stform-' + b.dataset.etapa); f.style.display = f.style.display === 'none' ? 'block' : 'none';
+      }));
+      document.querySelectorAll('#quizBody .st-save').forEach(b => b.addEventListener('click', () => {
+        const ei = +b.dataset.etapa; const wrap = b.closest('.st-form');
+        const tit = wrap.querySelector('.st-titulo').value.trim(); const mot = wrap.querySelector('.st-motivo').value.trim();
+        if (!tit) return;
+        const d = ensureProcesso(ei); d.custom = d.custom || []; d.custom.push({ titulo: tit, motivo: mot }); save(); renderQuiz();
+      }));
+      document.querySelectorAll('#quizBody .st-del').forEach(b => b.addEventListener('click', () => {
+        const d = ensureProcesso(+b.dataset.etapa); d.custom.splice(+b.dataset.ci, 1); save(); renderQuiz();
+      }));
+    }
+    function renderQuiz() {
+      renderDots();
+      const q = QUIZ[state.qIndex]; const sel = state.answers[q.key];
+      let inputHtml = '';
+      if (q.type === 'single' || q.type === 'multi') {
+        const showMultiCustom = q.type === 'multi' && q.customKey && Array.isArray(sel) && sel.includes(q.customTrigger);
+        inputHtml = '<div class="opts">' + q.opcoes.map(o => {
+          const isSel = q.type === 'multi' ? (Array.isArray(sel) && sel.includes(o.val)) : sel === o.val;
+          return `<button class="opt ${q.type === 'multi' ? 'multi' : ''} ${isSel ? 'sel' : ''}" data-val="${o.val}">
+        <span class="ic">${o.ic || ''}</span><span><span class="t">${o.t}</span>${o.d ? `<span class="d">${o.d}</span>` : ''}</span></button>`;
+        }).join('') + '</div>' + (showMultiCustom ? `<div class="q-input"><input type="text" id="qCustom" placeholder="${q.customPlaceholder || ''}" value="${(state.answers[q.customKey] || '').replace(/"/g, '&quot;')}"></div>` : '');
+      } else if (q.type === 'select') {
+        const showCustom = q.customKey && sel === q.customTrigger;
+        inputHtml = `<div class="q-input"><select id="qField">
+      <option value="">Selecione...</option>
+      ${q.opcoes.map(o => `<option value="${o.val}" ${sel === o.val ? 'selected' : ''}>${o.t}</option>`).join('')}
+    </select>${showCustom ? `<input type="text" id="qCustom" placeholder="${q.customPlaceholder || ''}" value="${(state.answers[q.customKey] || '').replace(/"/g, '&quot;')}" style="margin-top:12px">` : ''}</div>`;
+      } else if (q.type === 'textarea') {
+        inputHtml = `<div class="q-input"><textarea id="qField" placeholder="${q.placeholder || ''}">${sel || ''}</textarea></div>`;
+      } else if (q.type === 'text') {
+        inputHtml = `<div class="q-input"><input type="text" id="qField" placeholder="${q.placeholder || ''}" value="${(sel || '').replace(/"/g, '&quot;')}"></div>`;
+      } else if (q.type === 'stages') {
+        inputHtml = stagesHtml() + '<p class="q-optional" id="stagesAviso"></p>';
+      }
+      document.getElementById('quizBody').innerHTML = `
+    <h2>${q.titulo}</h2><p class="sub">${q.sub}</p>
+    ${inputHtml}
+    <div class="q-nav">
+      <button class="back" id="qBack">${state.qIndex > 0 ? '← Voltar' : '← Início'}</button>
+      <button class="btn" id="qNext" ${canAdvance() ? '' : 'disabled'}>${state.qIndex === QUIZ.length - 1 ? 'Ver minha trilha →' : 'Continuar →'}</button>
+    </div>`;
+      if (q.type === 'single' || q.type === 'multi') {
+        document.querySelectorAll('#quizBody .opt').forEach(btn => btn.addEventListener('click', () => {
+          const v = btn.dataset.val;
+          if (q.type === 'multi') {
+            let arr = Array.isArray(state.answers[q.key]) ? [...state.answers[q.key]] : [];
+            arr.includes(v) ? arr = arr.filter(x => x !== v) : arr.push(v);
+            state.answers[q.key] = arr; save(); renderQuiz();
+          } else {
+            state.answers[q.key] = v; save();
+            state.qIndex < QUIZ.length - 1 ? (state.qIndex++, renderQuiz()) : finishQuiz();
+          }
+        }));
+        const qcm = document.getElementById('qCustom');
+        if (qcm) qcm.addEventListener('input', e => { state.answers[q.customKey] = e.target.value; save(); });
+      } else if (q.type === 'select') {
+        document.getElementById('qField').addEventListener('change', e => { state.answers[q.key] = e.target.value; save(); renderQuiz(); });
+        const qc = document.getElementById('qCustom');
+        if (qc) qc.addEventListener('input', e => { state.answers[q.customKey] = e.target.value; save(); updateNextBtn(); });
+      } else if (q.type === 'stages') {
+        bindStages();
+        const av = document.getElementById('stagesAviso');
+        if (av) av.textContent = canAdvance() ? '' : '⚠️ Marque ou crie pelo menos uma tarefa em cada etapa para continuar.';
+      } else if (document.getElementById('qField')) {
+        document.getElementById('qField').addEventListener('input', e => { state.answers[q.key] = e.target.value; save(); updateNextBtn(); });
+      }
+      document.getElementById('qBack').addEventListener('click', () => {
+        if (state.qIndex > 0) { state.qIndex--; renderQuiz(); } else { state.step = 'welcome'; save(); show('welcome'); }
+      });
+      document.getElementById('qNext').addEventListener('click', () => {
+        if (!canAdvance()) return; save();
+        state.qIndex < QUIZ.length - 1 ? (state.qIndex++, renderQuiz()) : finishQuiz();
+      });
+    }
+    function finishQuiz() { state.step = 'welcome2'; save(); renderWelcome2(); show('welcome2'); }
+
+    /* ---------- DASHBOARD ---------- */
+    function renderDash() {
+      focoMarco = null;
+      document.getElementById('dashLoja').textContent = state.loja || 'Sua loja';
+      const av = document.getElementById('dashAvatar'); if (av) av.textContent = (state.loja || 'L').trim().charAt(0).toUpperCase();
+      document.getElementById('dashPessoa').innerHTML = (state.pessoa ? `<b>${esc(state.pessoa)}</b>` : '') + (state.funcao ? ` · ${esc(state.funcao)}` : '');
+      const T = trailFor(state.answers.modo);
+      document.getElementById('trailKicker').textContent = T.kicker;
+      document.getElementById('trailTitle').textContent = T.titulo;
+      document.getElementById('trailIntro').textContent = T.intro;
+      renderTrail(); renderVideos(); updateProgress();
+    }
+    function renderStepper() {
+      const T = trailFor(state.answers.modo);
+      const firstOpen = T.marcos.findIndex(m => !state.progress['m_' + m.id]);
+      const html = T.marcos.map((m, i) => {
+        const done = !!state.progress['m_' + m.id];
+        const atual = i === firstOpen;
+        const _vi = T.marcos.findIndex(x => x.id === focoMarco); const viewIdx = _vi < 0 ? (firstOpen < 0 ? T.marcos.length - 1 : firstOpen) : _vi; const cls = (done ? 'done ' : '') + (i === viewIdx ? 'sel' : '');
+        return `<button class="stp ${cls}" data-jump="${m.id}">
+      <span class="stp-dot">${done ? '✓' : (m.icon || i + 1)}</span>
+      <span class="stp-lbl">${m.titulo}</span></button>`;
+      }).join('<span class="stp-line"></span>');
+      const s = document.getElementById('stepper');
+      s.innerHTML = html;
+      s.querySelectorAll('[data-jump]').forEach(b => b.addEventListener('click', () => {
+        focoMarco = b.dataset.jump; renderTrail();
+        const el = document.getElementById('trail'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }));
+    }
+
+    function renderTrail() {
+        renderStepper();
+        const T = trailFor(state.answers.modo);
+        const firstOpen = T.marcos.findIndex(m => !state.progress['m_' + m.id]);
+        let idx = T.marcos.findIndex(m => m.id === focoMarco);
+        if (idx < 0) idx = firstOpen < 0 ? T.marcos.length - 1 : firstOpen;
+        const m = T.marcos[idx];
+        const done = !!state.progress['m_' + m.id];
+        const atual = idx === firstOpen;
+        const chips = m.videos.map(vid => { const v = VIDEOS.find(x => x.id === vid); return v ? `<button class="vid-chip" data-goto="${v.id}">▶ ${v.titulo}</button>` : ''; }).join('');
+        const docs = (m.docs || []).map(d => `<a class="vid-chip" href="${d.url}" target="_blank" rel="noopener" style="text-decoration:none">📄 ${d.titulo}</a>`).join('');
+        const todos = m.todos.map((t, j) => {
+          const ck = !!state.progress[`t_${m.id}_${j}`];
+          return `<div class="m-todo ${ck ? 'checked' : ''}"><input type="checkbox" id="t_${m.id}_${j}" ${ck ? 'checked' : ''}><label for="t_${m.id}_${j}">${t}</label></div>`;
+        }).join('');
+        const acaoBlock = m.botao ? `<div class="m-action">
+      <div class="lbl">👉 Faça agora: <b>${m.acao}</b></div>
+      <a class="m-action-btn" href="${m.botao.url}" target="_blank" rel="noopener">${m.botao.label} →</a>
+      <div class="m-hint">Abre o Sopha em outra aba — depois volte aqui e marque como feito.</div>
+    </div>`: '';
+        const navBtns = `<div class="m-nav">
+      ${idx > 0 ? `<button class="m-nav-btn" data-nav="${T.marcos[idx - 1].id}">← ${T.marcos[idx - 1].titulo}</button>` : '<span></span>'}
+      ${idx < T.marcos.length - 1 ? `<button class="m-nav-btn" data-nav="${T.marcos[idx + 1].id}">Próximo: ${T.marcos[idx + 1].titulo} →</button>` : '<span></span>'}
+    </div>`;
+        document.getElementById('trail').innerHTML = `<div class="milestone solo ${done ? 'done' : ''} ${atual ? 'atual' : ''}">
+      <div class="m-card open" data-card="${m.id}">
+        <div class="m-badges">${done ? '<span class="m-ok">✓ Concluído</span>' : (atual ? '<span class="m-now">Você está aqui</span>' : '')}<span class="m-count">Etapa ${idx + 1} de ${T.marcos.length}</span></div>
+        <div class="m-top"><div><div class="m-title">${m.icon || ''} ${m.titulo}</div><div class="m-desc">${m.desc}</div></div>
+        <button class="m-check" data-check="${m.id}">${done ? '✓ Concluído' : 'Marcar feito'}</button></div>
+        ${acaoBlock}
+        <button class="m-toggle" data-toggle="${m.id}">Precisa de ajuda? Ver passo a passo${(chips || docs) ? ' e materiais' : ''} ▾</button>
+        <div class="m-extra">${todos}${(chips || docs) ? `<div class="vid-chips">${docs}${chips}</div>` : ''}</div>
+        ${navBtns}
+      </div></div>`;
+        const wrap = document.getElementById('trail');
+        wrap.querySelectorAll('[data-check]').forEach(b => b.addEventListener('click', () => {
+          const id = b.dataset.check; const wasDone = !!state.progress['m_' + id];
+          state.progress['m_' + id] = !wasDone;
+          if (!wasDone && idx < T.marcos.length - 1) focoMarco = T.marcos[idx + 1].id; // concluiu -> vai pro próximo
+          save(); renderTrail(); updateProgress();
+        }));
+        wrap.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => { focoMarco = b.dataset.nav; renderTrail(); document.getElementById('trail').scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+        wrap.querySelectorAll('[data-toggle]').forEach(b => b.addEventListener('click', () => document.querySelector(`[data-card="${b.dataset.toggle}"]`).classList.toggle('open')));
+        wrap.querySelectorAll('.m-todo input').forEach(c => c.addEventListener('change', () => { state.progress[c.id] = c.checked; c.closest('.m-todo').classList.toggle('checked', c.checked); save(); }));
+        wrap.querySelectorAll('[data-goto]').forEach(b => b.addEventListener('click', () => { switchTab('learn'); const el = document.getElementById('vid-' + b.dataset.goto); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }));
+      }
+      function updateProgress() {
+        const pct = pctFor(state);
+        document.getElementById('progFill').style.width = pct + '%';
+        document.getElementById('progPct').textContent = pct + '%';
+        document.getElementById('doneBanner').classList.toggle('show', pct === 100);
+      }
+
+      const CRONOGRAMA_IMPLANTACAO = [
+        { fase: 'Preenchimento do Formulário', prazo: '1 dia', desc: 'A loja preenche o formulário inicial com as informações da operação.' },
+        { fase: 'Setup da Matriz', prazo: '1 dia', desc: 'Configuração inicial da matriz da loja no sistema.' },
+        { fase: 'Kick-Off', prazo: '2 a 3 reuniões', desc: 'O pontapé inicial, dividido em reuniões:', sub: [
+          'Reunião 1: apresentação, explicação do sistema, entendimento do processo da loja (tarefas por etapa), cadastro do cliente teste e do dono no Sopha, conceito de 1 ou 2 tarefas por etapa.',
+          'Reunião 2 — Lição de Casa: cumprimento dos combinados por Dono e Braço Direito — revisão das tarefas, envio ao consultor, 1 cliente em andamento por etapa, anexos e cadastro dos funcionários.',
+          'Reunião 3 (se necessário): caso os combinados não tenham sido cumpridos ou haja muitas dúvidas.'
+        ] },
+        { fase: 'Lançamento', prazo: '1 dia', desc: 'Reunião geral de lançamento do Sopha com toda a equipe.' },
+        { fase: 'Treinamento por Departamento', prazo: 'máx. 3 dias', desc: 'Logo após o lançamento ou em dias distintos da semana.' },
+        { fase: 'Acompanhamento', prazo: '60 dias', desc: 'Início dos acompanhamentos: Plantão de Dúvidas, CDC, TPG e MCT (Monitorar, Cobrar e Treinar).', marco: true },
+      ];
+      const CRONOGRAMA_REIMPLANTACAO = [
+        { fase: 'Diagnóstico da Operação', tag: 'Raio-X', prazo: '1 a 2 reuniões', desc: 'Entender como a operação está hoje e onde o processo quebrou.', sub: [
+          'Levantar negócios no pipeline (em atraso e sem tarefas)',
+          'Identificar etapas que não estão sendo usadas',
+          'Ver como a equipe está usando (ou ignorando) o sistema',
+          'Listar as principais falhas de uso e de processo'
+        ] },
+        { fase: 'Organização do Painel', tag: 'Desafogamento', prazo: 'faxina + lição de casa', desc: 'A faxina dos dados: revisão completa do pipeline, organizando negócios, etapas, tarefas e documentos. Corrigir cadastros, reposicionar clientes nas etapas certas e limpar duplicados. (louça suja → louça limpa)' },
+        { fase: 'Ajuste do Sistema', tag: 'Faxina', prazo: 'configuração', desc: 'Personalizar o Sopha à rotina real da loja: etapas, tarefas padrão, tags, pastas, mensagens e fluxos — para o uso ser intuitivo no dia a dia.' },
+        { fase: 'Reposicionamento da Cultura', prazo: 'reunião com a equipe', desc: 'Alinhar a equipe na forma correta de trabalhar.', sub: [
+          'Reforçar que não é sobre "usar ferramenta", e sim seguir o processo',
+          'Lista Diária de Clientes e responsabilidades por etapa',
+          'Alinhar a expectativa de uso diário do sistema',
+          'Corrigir a mentalidade de uso parcial / fora do processo'
+        ] },
+        { fase: 'Relançamento', prazo: '1 dia', desc: 'Retomar a operação com o processo correto, desde o início.', sub: [
+          'Garantir que todos os novos atendimentos entrem no Sopha',
+          'Aplicar o processo correto desde o primeiro cliente',
+          'Acompanhar o uso na prática (não só no discurso)'
+        ] },
+        { fase: 'Apoio de Rotina', prazo: '1 a 2 meses', desc: 'Acompanhamento contínuo garantindo que a equipe segue o fluxo definido na prática.', marco: true },
+      ];
+      function cronoFor(modo) { return modo === 'reimplantacao' ? CRONOGRAMA_REIMPLANTACAO : CRONOGRAMA_IMPLANTACAO; }
+      function renderCronoStrip(stripId, detailId) {
+        const strip = document.getElementById(stripId); if (!strip) return;
+        const data = cronoFor(state.answers.modo);
+        strip.innerHTML = data.map((c, i) => `<button class="cs-chip ${c.marco ? 'marco' : ''}" data-ci="${i}">
+        <span class="cs-num">${c.marco ? '🏁' : i + 1}</span>
+        <span class="cs-fase">${c.fase}</span>
+        <span class="cs-prazo">${c.prazo}</span></button>`).join('<span class="cs-arrow">›</span>');
+        const detail = document.getElementById(detailId);
+        function showDetail(i) {
+          strip.querySelectorAll('.cs-chip').forEach((b, bi) => b.classList.toggle('on', bi === i));
+          const c = data[i];
+          const tag = c.tag ? `<span class="cd-tag">internamente: "${c.tag}"</span>` : '';
+          const sub = c.sub ? `<ul class="cd-sub">${c.sub.map(s => `<li>${s}</li>`).join('')}</ul>` : '';
+          if (detail) detail.innerHTML = `<div class="cd-card"><div class="cd-head"><span class="cd-fase">${c.fase}</span>${tag}<span class="cd-prazo">${c.prazo}</span></div><div class="cd-desc">${c.desc}</div>${sub}</div>`;
+        }
+        strip.querySelectorAll('[data-ci]').forEach(b => b.addEventListener('click', () => showDetail(+b.dataset.ci)));
+        showDetail(0);
+      }
+      function renderWelcome2() {
+        const reimp = state.answers.modo === 'reimplantacao';
+        document.getElementById('w2Title').innerHTML = reimp ? 'Vamos <em>retomar</em> o controle!' : 'Bora caminhar para o <em>sucesso</em>!';
+        document.getElementById('w2Intro').innerHTML = reimp
+          ? 'Sua loja já conhece o Sopha — agora vamos recolocar o processo nos trilhos. Olha o caminho: em média <b>1 a 2 meses</b> de apoio até a rotina engrenar.'
+          : 'Antes de começar, olha o caminho que vamos percorrer juntos. Se todos cumprirem os combinados, a implantação leva cerca de <b>2 semanas</b>.';
+        document.getElementById('w2CronoTitle').textContent = reimp ? 'Nosso plano de reimplantação' : 'Nosso plano de implantação';
+        renderCronoStrip('cronoW2Strip', 'cronoW2Detail');
+        renderCombos('combosW2');
+      }
+      const COMBINADOS = [
+        { ic: '📅', t: 'Uso Diário', d: 'Entrar no sistema todos os dias, não apenas quando lembra ou quando tem problema.' },
+        { ic: '⚡', t: 'Participação Ativa', d: 'Cada pessoa atualiza suas informações em tempo real, sem depender de outra.' },
+        { ic: '👑', t: 'Envolvimento da Liderança', d: 'Os donos revisam, cobram e ajustam com base nos dados — e estão presentes nas reuniões de decisão.' },
+        { ic: '🎯', t: 'Disciplina no Processo', d: 'Seguir o fluxo definido e fazer o follow-up — é ele que faz o negócio andar.' },
+      ];
+      function renderCombos(elId) {
+        const t = document.getElementById(elId); if (!t) return;
+        t.innerHTML = COMBINADOS.map(c => `<div class="w2-combo"><div class="w2-combo-ic">${c.ic}</div><div><b>${c.t}</b><span>${c.d}</span></div></div>`).join('');
+      }
+
+
+
+      const PERSO = [
+        { id: 'acoes', nome: 'Ações', pronto: false },
+        {
+          id: 'agendamentos', nome: 'Agendamentos', pronto: true,
+          url: 'https://www.lojista.sopha.com.br/agendamentos',
+          oque: 'Configure os títulos de agendamento ligados a cada etapa do processo — por exemplo, a etapa Venda gera o "Apresentação do Projeto Inicial".',
+          passos: [
+            'Clique em "Cadastrar novo tipo de agendamento"',
+            'Nome do agendamento (ex.: Medição, Entrega, Pré-projeto)',
+            'Etapa do agendamento (a qual etapa do processo ele pertence)',
+            'Mensagem de confirmação do agendamento',
+            'Mensagem via aplicativo — o que chega no AppWeb e no WhatsApp do cliente (se a loja tiver a integração)'
+          ],
+          dica: 'Quando a loja fecha com o Sopha, algumas já vêm configuradas. Revise as existentes antes de criar novas.'
+        },
+        { id: 'ambientes', nome: 'Ambientes', pronto: false },
+        { id: 'assinaturas', nome: 'Assinaturas', pronto: false },
+        { id: 'cargos', nome: 'Cargos', pronto: false },
+        { id: 'departamentos', nome: 'Departamentos', pronto: false },
+        { id: 'etiquetas', nome: 'Etiquetas', pronto: false },
+        { id: 'mensagens', nome: 'Mensagens Customizadas', pronto: false },
+        { id: 'origem', nome: 'Origem do cliente', pronto: false },
+        { id: 'pastas', nome: 'Pastas', pronto: false },
+        { id: 'pontos', nome: 'Pontos de atenção', pronto: false },
+        { id: 'tarefas', nome: 'Tarefas', pronto: false },
+      ];
+
+      function renderPerso() {
+        const el = document.getElementById('persoList'); if (!el) return;
+        el.innerHTML = PERSO.map(p => {
+          if (!p.pronto) return `<div class="perso-item breve"><div class="perso-head"><span class="perso-nome">${p.nome}</span><span class="perso-tag">em breve</span></div></div>`;
+          const passos = p.passos.map(s => `<li>${s}</li>`).join('');
+          return `<div class="perso-item" data-perso="${p.id}">
+            <button class="perso-head" data-ptoggle="${p.id}"><span class="perso-nome">${p.nome}</span><span class="perso-seta">▾</span></button>
+            <div class="perso-body">
+              <p class="perso-oque">${p.oque}</p>
+              <a class="m-action-btn" href="${p.url}" target="_blank" rel="noopener">Abrir ${p.nome} no Sopha →</a>
+              <div class="perso-passos"><b>Como cadastrar um novo:</b><ol>${passos}</ol></div>
+              ${p.dica ? `<div class="perso-dica">💡 ${p.dica}</div>` : ''}
+            </div></div>`;
+        }).join('');
+        el.querySelectorAll('[data-ptoggle]').forEach(b => b.addEventListener('click', () => {
+          b.closest('.perso-item').classList.toggle('open');
+        }));
+      }
+
+      function renderVideos() {
+        let html = '';
+        CATS.forEach(cat => {
+          const vids = VIDEOS.filter(v => v.cat === cat); if (!vids.length) return;
+          html += `<div class="cat-head">${cat}</div><div class="vid-grid">`;
+          vids.forEach(v => {
+            const media = v.yt ? `<button class="vid-play" data-yt="${v.yt}" data-title="${(v.titulo || '').replace(/"/g, '&quot;')}"><img loading="lazy" src="https://img.youtube.com/vi/${v.yt}/hqdefault.jpg" alt="${(v.titulo || '').replace(/"/g, '&quot;')}"><span class="vid-play-ic">▶</span></button>`
+              : `<div class="placeholder">adicionar link do vídeo</div>`;
+            html += `<div class="vid-card" id="vid-${v.id}"><div class="vid-thumb">${media}</div>
+        <div class="vid-body"><div class="tag">${v.cat}</div><h4>${v.titulo}</h4></div></div>`;
+          });
+          html += '</div>';
+        });
+        if (PDFS && PDFS.length) {
+          html += `<div class="cat-head" style="margin-top:42px">Materiais em PDF</div><div class="vid-grid">`;
+          PDFS.forEach(p => {
+            html += `<a class="vid-card pdf-card" href="${p.url}" target="_blank" rel="noopener">
+        <div class="pdf-ic">📄</div>
+        <div class="vid-body"><div class="tag">PDF</div><h4>${p.titulo}</h4><p class="pdf-desc">${p.desc || ''}</p></div></a>`;
+          });
+          html += '</div>';
+        }
+        document.getElementById('vidGrid').innerHTML = html;
+        document.querySelectorAll('#vidGrid .vid-play').forEach(btn => btn.addEventListener('click', () => {
+          window.open('https://www.youtube.com/watch?v=' + btn.dataset.yt, '_blank', 'noopener');
+        }));
+      }
+
+      function switchTab(name) {
+        document.querySelectorAll('#screen-dash .tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
+        document.getElementById('view-trail').style.display = name === 'trail' ? 'block' : 'none';
+        document.getElementById('view-learn').style.display = name === 'learn' ? 'block' : 'none';
+        const vp = document.getElementById('view-perso'); if (vp) { vp.style.display = name === 'perso' ? 'block' : 'none'; if (name === 'perso') renderPerso(); }
+        window.scrollTo(0, 0);
+      }
+      document.querySelectorAll('#screen-dash .tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+      document.getElementById('goTrail').addEventListener('click', () => { state.step = 'dash'; save(); renderDash(); show('dash'); });
+      document.getElementById('logoutBtn').addEventListener('click', async () => {
+        try { await sb.auth.signOut(); } catch (e) {}
+        store.del(CUR); state = newRecord(); lojaInput.value = ''; pessoaInput.value = ''; funcaoSel.value = 'Dono(a)'; document.getElementById('loginEmail').value = ''; document.getElementById('loginPass').value = ''; checkStart(); show('login');
+      });
+      { const _rl = document.getElementById('resetLink'); if (_rl) _rl.addEventListener('click', e => { e.preventDefault(); if (confirm('Recomeçar esta loja do zero? O progresso dela será apagado.')) { delStore(state.slug); store.del(CUR); state = newRecord(); lojaInput.value = ''; pessoaInput.value = ''; checkStart(); show('welcome'); } }); }
+
+      /* ---------- COMPARTILHAR PROGRESSO (código) ---------- */
+      function encodeRec(r) { return btoa(unescape(encodeURIComponent(JSON.stringify({ slug: r.slug, loja: r.loja, pessoa: r.pessoa, funcao: r.funcao, answers: r.answers, progress: r.progress, updated: r.updated })))); }
+      function decodeRec(c) { const o = JSON.parse(decodeURIComponent(escape(atob(c.trim())))); o.step = 'dash'; o.qIndex = 0; return o; }
+      function openModal(html) { document.getElementById('modalBox').innerHTML = html; document.getElementById('modalBg').classList.add('show'); }
+      function closeModal() { document.getElementById('modalBg').classList.remove('show'); }
+      document.getElementById('modalBg').addEventListener('click', e => { if (e.target.id === 'modalBg') closeModal(); });
+      document.getElementById('drawerX').addEventListener('click', closeDrawer);
+      document.getElementById('drawerBg').addEventListener('click', e => { if (e.target.id === 'drawerBg') closeDrawer(); });
+
+      document.getElementById('shareBtn').addEventListener('click', () => {
+        const code = encodeRec(state); const pct = pctFor(state);
+        const waText = encodeURIComponent(`Progresso da implantação — ${state.loja} (${pct}% concluído)\nResponsável: ${state.pessoa}\n\nCódigo para o consultor:\n${code}`);
+        openModal(`
+    <h3>📤 Enviar progresso</h3>
+    <p>Copie o código abaixo e mande para seu consultor, ou envie direto pelo WhatsApp. Ele consegue ver exatamente onde sua loja está.</p>
+    <textarea id="shareCode" readonly>${code}</textarea>
+    <div class="m-actions">
+      <button class="btn sm wa" id="waSend">Enviar no WhatsApp</button>
+      <button class="btn sm ghost" id="copyCode">Copiar código</button>
+      <button class="btn sm ghost" id="closeM">Fechar</button>
+    </div>`);
+        document.getElementById('waSend').addEventListener('click', () => window.open('https://wa.me/?text=' + waText, '_blank'));
+        document.getElementById('copyCode').addEventListener('click', () => { const t = document.getElementById('shareCode'); t.select(); try { document.execCommand('copy'); } catch (e) { } document.getElementById('copyCode').textContent = 'Copiado ✓'; });
+        document.getElementById('closeM').addEventListener('click', closeModal);
+      });
+
+      /* ---------- ADMIN ---------- */
+      { const _ga = document.getElementById('goAdmin'); if (_ga) _ga.addEventListener('click', () => show('admin-login')); }
+      document.getElementById('adminBack').addEventListener('click', () => show('welcome'));
+      document.getElementById('adminEnter').addEventListener('click', tryAdmin);
+      document.getElementById('adminPass').addEventListener('keydown', e => { if (e.key === 'Enter') tryAdmin(); });
+      document.getElementById('adminLogout').addEventListener('click', async () => {
+        try { await sb.auth.signOut(); } catch (e) {}
+        try { getIndex().forEach(sl => store.del(PFX + sl)); store.set(IDX, []); store.del(CUR); } catch (e) {}
+        document.getElementById('loginEmail').value = ''; document.getElementById('loginPass').value = ''; show('login');
+      });
+      document.getElementById('importBtn').addEventListener('click', async () => {
+        const inp = document.getElementById('importCode');
+        try { const rec = decodeRec(inp.value); putStore(rec); await cloudSave(rec); inp.value = ''; renderAdmin(); }
+        catch (e) { alert('Código inválido. Confira se copiou o texto completo.'); }
+      });
+      document.getElementById('adminBusca').addEventListener('input', () => renderAdmin());
+      document.querySelectorAll('.af-btn').forEach(b => b.addEventListener('click', () => {
+        document.querySelectorAll('.af-btn').forEach(x => x.classList.remove('on'));
+        b.classList.add('on'); filtroAdmin = b.dataset.filtro; renderAdmin();
+      }));
+      const novaForm = document.getElementById('novaForm');
+      document.getElementById('novaLojaBtn').addEventListener('click', () => {
+        novaForm.classList.toggle('show');
+        document.getElementById('nfMsg').textContent = '';
+      });
+      document.getElementById('nfCancelar').addEventListener('click', () => {
+        novaForm.classList.remove('show');
+        ['nfEmail', 'nfLoja', 'nfPessoa'].forEach(id => document.getElementById(id).value = '');
+      });
+      document.getElementById('nfSalvar').addEventListener('click', async () => {
+        const email = document.getElementById('nfEmail').value.trim().toLowerCase();
+        const loja = document.getElementById('nfLoja').value.trim();
+        const pessoa = document.getElementById('nfPessoa').value.trim();
+        const funcao = document.getElementById('nfFuncao').value;
+        const msg = document.getElementById('nfMsg');
+        msg.className = 'nf-msg'; msg.textContent = '';
+        if (!email || !loja || !pessoa) { msg.classList.add('err'); msg.textContent = 'Preencha e-mail, nome da loja e responsável.'; return; }
+        const rec = newRecord();
+        rec.slug = normalize(loja); rec.loja = loja; rec.pessoa = pessoa; rec.funcao = funcao;
+        rec.email = email; rec.step = 'quiz'; rec.preparada = true;
+        try {
+          const { error } = await sb.from('lojas').upsert({ slug: rec.slug, data: rec, updated: new Date().toISOString(), email: email });
+          if (error) { msg.classList.add('err'); msg.textContent = 'Erro ao salvar: ' + error.message; return; }
+          putStore(rec);
+          msg.classList.add('ok'); msg.textContent = '✓ Loja cadastrada! Quando ela logar com ' + email + ', já vem preenchida.';
+          ['nfEmail', 'nfLoja', 'nfPessoa'].forEach(id => document.getElementById(id).value = '');
+          renderAdmin();
+        } catch (e) { msg.classList.add('err'); msg.textContent = 'Erro ao salvar. Tente de novo.'; }
+      });
+      function tryAdmin() {
+        if (document.getElementById('adminPass').value === PASS_ADMIN) { renderAdmin(); show('admin'); }
+        else { document.getElementById('adminErr').style.display = 'block'; }
+      }
+      function timeAgo(ts) {
+        if (!ts) return ''; const d = Math.floor((Date.now() - ts) / 1000);
+        if (d < 60) return 'agora há pouco'; if (d < 3600) return `há ${Math.floor(d / 60)} min`;
+        if (d < 86400) return `há ${Math.floor(d / 3600)} h`; return `há ${Math.floor(d / 86400)} dia(s)`;
+      }
+      function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+      function fichaRows(r) {
+        const a = r.answers || {}; const rows = [];
+        const marca = a.marca === 'Outra marca' && a.marca_outra ? a.marca_outra : a.marca;
+        if (marca) rows.push(`<div class="row"><b>Marca/Fábrica</b><span>${esc(marca)}</span></div>`);
+        if (a.porte) rows.push(`<div class="row"><b>Equipe</b><span>${optLabel('porte', a.porte)}</span></div>`);
+        if (a.unidades) rows.push(`<div class="row"><b>Unidades</b><span>${optLabel('unidades', a.unidades)}</span></div>`);
+        if (Array.isArray(a.deps) && a.deps.length) { let areas = a.deps.map(v => v === 'outros' && a.deps_outros ? a.deps_outros : optLabel('deps', v)); rows.push(`<div class="row"><b>Áreas</b><span>${esc(areas.join(', '))}</span></div>`); }
+        if (Array.isArray(a.cargos) && a.cargos.length) rows.push(`<div class="row"><b>Cargos</b><span>${a.cargos.map(v => optLabel('cargos', v)).join(', ')}</span></div>`);
+        if (Array.isArray(a.ferramenta) && a.ferramenta.length) { let sis = a.ferramenta.map(v => v === 'outro' && a.ferramenta_outro ? a.ferramenta_outro : optLabel('ferramenta', v)); rows.push(`<div class="row"><b>Sistema hoje</b><span>${esc(sis.join(', '))}</span></div>`); }
+        else if (a.ferramenta && !Array.isArray(a.ferramenta)) rows.push(`<div class="row"><b>Sistema hoje</b><span>${esc(a.ferramenta)}</span></div>`);
+        if (a.obs) rows.push(`<div class="row"><b>Observações</b><span>${esc(a.obs)}</span></div>`);
+        if (!rows.length) return '';
+        return `<div class="dw-sec"><div class="tit">Ficha da loja</div>${rows.join('')}</div>`;
+      }
+      function fichaProcCols(r) {
+        const a = r.answers || {};
+        if (!a.processo) return '';
+        let cols = '';
+        const ORDEM = ['Pré-Venda', 'Venda', 'Medição', 'Executivo', 'Fabricação', 'Entrega', 'Montagem', 'Pós-Montagem', 'Assistência Técnica'];
+        const etapasOrdenadas = Object.keys(a.processo).sort((x, y) => {
+          let ix = ORDEM.indexOf(x), iy = ORDEM.indexOf(y);
+          if (ix < 0) ix = 99; if (iy < 0) iy = 99;
+          return ix - iy;
+        });
+        etapasOrdenadas.forEach(et => {
+          const d = a.processo[et] || {};
+          const sel = d.sel ? Object.keys(d.sel).filter(k => d.sel[k]) : [];
+          const cus = (d.custom || []).map(c => ({ t: c.titulo, motivo: c.motivo || '', nova: true }));
+          const all = sel.map(t => ({ t: t, nova: false })).concat(cus);
+          if (all.length) cols += `<div class="pc-col"><div class="pc-et">${esc(et)} <span class="pc-count">${all.length}</span></div>${all.map(x => `<div class="pc-task ${x.nova ? 'nova' : ''}">${x.nova ? '➕ ' : ''}${esc(x.t)}${x.motivo ? `<span class="pc-motivo">${esc(x.motivo)}</span>` : ''}</div>`).join('')}</div>`;
+        });
+        if (!cols) return '';
+        return `<div class="dw-sec"><div class="tit">Processo — tarefas que a loja escolheu</div><div class="proc-cols">${cols}</div></div>`;
+      }
+      let filtroAdmin = 'ativas';
+      async function renderAdmin() {
+        try {
+          const { data, error } = await sb.from('lojas').select('data').order('updated', { ascending: false });
+          if (error) console.warn('leitura da nuvem:', error);
+          if (!error && data) { data.forEach(row => { if (row.data && row.data.slug) putStore(row.data); }); }
+        } catch (e) { console.warn('leitura da nuvem falhou:', e); }
+        const idx = getIndex();
+        const todas = idx.map(getStore).filter(Boolean);
+        // separa ativas x arquivadas (arquivada = 100%)
+        const arquivadas = todas.filter(r => pctFor(r) >= 100);
+        const ativas = todas.filter(r => pctFor(r) < 100);
+        // KPIs
+        const emImpl = ativas.filter(r => !(r.answers && r.answers.modo === 'reimplantacao')).length;
+        const emReimpl = ativas.filter(r => r.answers && r.answers.modo === 'reimplantacao').length;
+        const media = ativas.length ? Math.round(ativas.reduce((s, r) => s + pctFor(r), 0) / ativas.length) : 0;
+        const kpis = document.getElementById('adminKpis');
+        if (kpis) kpis.innerHTML = `
+          <div class="kpi"><div class="n">${ativas.length}</div><div class="l">Lojas ativas</div></div>
+          <div class="kpi"><div class="n">${emImpl}</div><div class="l">Em implantação</div></div>
+          <div class="kpi"><div class="n">${emReimpl}</div><div class="l">Em retomada</div></div>
+          <div class="kpi destaque"><div class="n">${media}%</div><div class="l">Progresso médio</div></div>
+          <div class="kpi"><div class="n">${arquivadas.length}</div><div class="l">Concluídas</div></div>`;
+        // lista conforme filtro + busca
+        const base = filtroAdmin === 'arquivadas' ? arquivadas : ativas;
+        document.getElementById('adminCount').textContent = filtroAdmin === 'arquivadas'
+          ? `Lojas concluídas (${arquivadas.length})` : `Lojas ativas (${ativas.length})`;
+        const termo = (document.getElementById('adminBusca')?.value || '').toLowerCase().trim();
+        const recs = base
+          .filter(r => !termo || (r.loja || '').toLowerCase().includes(termo) || (r.pessoa || '').toLowerCase().includes(termo))
+          .sort((a, b) => (b.updated || 0) - (a.updated || 0));
+        const grid = document.getElementById('adminGrid');
+        grid.className = 'admin-grid';
+        if (!recs.length) {
+          grid.innerHTML = `<div class="admin-empty">${filtroAdmin === 'arquivadas' ? 'Nenhuma loja concluída ainda.' : 'Nenhuma loja ativa. Cadastre uma nova loja acima.'}</div>`;
+          return;
+        }
+        grid.innerHTML = recs.map(r => {
+          const modo = r.answers && r.answers.modo; const pct = pctFor(r);
+          const a = r.answers || {};
+          const marca = a.marca === 'Outra marca' && a.marca_outra ? a.marca_outra : a.marca;
+          const T = trailFor(modo); const feitas = T.marcos.filter(m => r.progress['m_' + m.id]).length;
+          return `<button class="store-card" data-open="${r.slug}">
+      <div class="sc-top"><div><h4>${esc(r.loja)}</h4><div class="sc-meta">${esc(r.pessoa) || '—'} · ${esc(r.funcao) || ''}</div>${marca ? `<div class="sc-brand">🏷️ ${esc(marca)}</div>` : ''}</div>
+        <span class="badge ${modo === 'reimplantacao' ? 'reimpl' : 'impl'}">${modo === 'reimplantacao' ? 'Retomada' : 'Implantação'}</span></div>
+      <div class="sc-pct"><span class="num">${pct}%</span><div class="sc-meter"><i style="width:${pct}%"></i></div></div>
+      <div class="sc-etapas">${feitas} de ${T.marcos.length} etapas · atualizado ${timeAgo(r.updated)}</div>
+      <div class="sc-open">Ver ficha completa →</div>
+    </button>`;
+        }).join('');
+        grid.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openStoreDetail(b.dataset.open)));
+      }
+      function openStoreDetail(slug) {
+        const r = getStore(slug); if (!r) return;
+        const modo = r.answers && r.answers.modo; const T = trailFor(modo); const pct = pctFor(r);
+        const marks = T.marcos.map(m => { const ok = !!r.progress['m_' + m.id]; return `<div class="sc-mark ${ok ? 'ok' : ''}"><span class="dot">${ok ? '✓' : ''}</span>${m.titulo}</div>`; }).join('');
+        document.getElementById('drawerBody').innerHTML = `
+          <div class="dw-head"><div><h3>${esc(r.loja)}</h3><div class="dw-meta">${esc(r.pessoa) || '—'} · ${esc(r.funcao) || ''} · ${esc(r.email) || 'sem e-mail'}</div></div>
+            <span class="badge ${modo === 'reimplantacao' ? 'reimpl' : 'impl'}">${modo === 'reimplantacao' ? 'Retomada' : 'Implantação'}</span></div>
+          <div class="dw-pct"><span class="num">${pct}%</span><div class="sc-meter"><i style="width:${pct}%"></i></div></div>
+          <div class="dw-marks">${marks}</div>
+          ${fichaRows(r)}${fichaProcCols(r)}
+          <div class="dw-foot"><span class="sc-updated">Atualizado ${timeAgo(r.updated)}</span><button class="sc-del" data-del="${r.slug}">Apagar loja</button></div>`;
+        document.getElementById('drawerBody').querySelector('[data-del]').addEventListener('click', async () => {
+          if (confirm('Apagar "' + r.loja + '" do painel?\n\nIsso remove só os dados desta loja. Nenhum outro dado é afetado.')) {
+            delStore(slug);
+            try { await sb.from('lojas').delete().eq('slug', slug); } catch (e) { console.warn('delete nuvem falhou:', e); }
+            closeDrawer(); renderAdmin();
+          }
+        });
+        document.getElementById('drawerBg').classList.add('show');
+      }
+      function closeDrawer() { document.getElementById('drawerBg').classList.remove('show'); }
+
+      /* ---------- BOOT (retoma de onde parou) ---------- */
+      const ADMIN_EMAILS = ['criz@sopha.com.br'];
+      async function resumeLoja(user) {
+        const email = ((user && user.email) || '').toLowerCase();
+        const uid = user && user.id;
+        if (email) {
+          try {
+            const { data } = await sb.from('lojas').select('data, user_id, slug').eq('email', email).limit(1);
+            if (data && data.length && data[0].data) {
+              const rec = data[0].data;
+              // "carimba" o user_id na loja preparada (só na 1ª vez)
+              if (uid && !data[0].user_id) {
+                try { await sb.from('lojas').update({ user_id: uid }).eq('slug', data[0].slug); } catch (e) { console.warn('carimbo user_id:', e); }
+              }
+              state = rec; putStore(rec); store.set(CUR, rec.slug);
+              lojaInput.value = rec.loja || ''; pessoaInput.value = rec.pessoa || ''; funcaoSel.value = rec.funcao || 'Dono(a)';
+              if (rec.preparada) {
+                lojaInput.readOnly = true; pessoaInput.readOnly = true; funcaoSel.disabled = true;
+                lojaInput.classList.add('travado'); pessoaInput.classList.add('travado'); funcaoSel.classList.add('travado');
+                if (startBtn) startBtn.disabled = false;
+              }
+              if (rec.step === 'dash' && rec.answers && rec.answers.modo) { renderDash(); show('dash'); }
+              else { state.qIndex = state.qIndex || 0; renderQuiz(); show('quiz'); }
+              checkStart(); return;
+            }
+          } catch (e) { console.warn('busca loja preparada:', e); }
+        }
+        resumeLocal();
+      }
+      function resumeLocal() {
+        const cur = store.get(CUR); const rec = cur ? getStore(cur) : null;
+        if (rec && rec.step === 'dash' && rec.answers && rec.answers.modo) {
+          state = rec; lojaInput.value = rec.loja; pessoaInput.value = rec.pessoa || ''; funcaoSel.value = rec.funcao || 'Dono(a)';
+          renderDash(); show('dash');
+        } else if (rec && rec.step === 'quiz') {
+          state = rec; lojaInput.value = rec.loja; pessoaInput.value = rec.pessoa || ''; renderQuiz(); show('quiz');
+        } else { show('welcome'); }
+        checkStart();
+      }
+      function routeAfterLogin(user) {
+        const email = ((user && user.email) || '').toLowerCase();
+        if (ADMIN_EMAILS.includes(email)) { renderAdmin(); show('admin'); }
+        else { resumeLoja(user); }
+      }
+      async function doLogin() {
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const pass = document.getElementById('loginPass').value;
+        const erro = document.getElementById('loginErro'); erro.textContent = '';
+        if (!email || !pass) { erro.textContent = 'Preencha e-mail e senha.'; return; }
+        const btn = document.getElementById('loginBtn'); btn.disabled = true; btn.textContent = 'Entrando...';
+        try {
+          const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+          if (error) { erro.textContent = 'E-mail ou senha incorretos.'; btn.disabled = false; btn.textContent = 'Entrar →'; return; }
+          btn.disabled = false; btn.textContent = 'Entrar →';
+          routeAfterLogin(data.user);
+        } catch (e) { erro.textContent = 'Erro ao entrar. Tente de novo.'; btn.disabled = false; btn.textContent = 'Entrar →'; }
+      }
+      document.getElementById('loginBtn').addEventListener('click', doLogin);
+      document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+      (async function boot() {
+        try {
+          const { data } = await sb.auth.getSession();
+          if (data && data.session && data.session.user) { routeAfterLogin(data.session.user); return; }
+        } catch (e) { console.warn('sessão:', e); }
+        show('login');
+        checkStart();
+      })();
+  </script>
+</body>
+
+</html>
